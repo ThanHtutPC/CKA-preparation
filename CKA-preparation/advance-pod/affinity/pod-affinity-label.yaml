@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-affinity-pod-label
+  labels:
+    app: frontend
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution: 
+      - labelSelector:
+          matchLabels:
+            app: backend
+        topologyKey: kubernetes.io/hostname 
