@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: flask
+  template: 
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+      - name: flask
+        image: thanhtutln2020/flask-app:latest
+        ports:
+        - containerPort: 5000
+      nodeSelector:
+        kubernetes.io/hostname: cluster-worker
