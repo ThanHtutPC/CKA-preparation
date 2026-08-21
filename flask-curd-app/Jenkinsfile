@@ -1,0 +1,164 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_REPO       = 'https://github.com/ThanHtutPC/CKA-preparation.git'
+        GIT_BRANCH     = 'CI-CD-lab'
+
+        IMAGE_NAME     = 'flask-curd-app'
+        IMAGE_TAG      = 'latest'
+        CONTAINER_NAME = 'flask-curd-app'
+
+        APP_DIR        = 'flask-curd-app'
+        CONTAINERFILE  = 'Containerfile'
+    }
+
+    stages {
+
+        stage('Start') {
+            steps {
+                echo '======================================'
+                echo 'Starting Jenkins Pipeline'
+                echo '======================================'
+                echo "Branch: ${GIT_BRANCH}"
+            }
+        }
+
+        stage('Clean Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+
+        stage('Git Clone') {
+            steps {
+                echo 'Cloning Git repository...'
+
+                git(
+                    branch: "${GIT_BRANCH}",
+                    credentialsId: 'github-credentials',
+                    url: "${GIT_REPO}"
+                )
+            }
+        }
+
+        stage('Check Source Code') {
+            steps {
+                sh '''
+                    echo "Current directory:"
+                    pwd
+
+                    echo ""
+                    echo "Repository files:"
+                    ls -la
+
+                    echo ""
+                    echo "Application files:"
+                    ls -la ${APP_DIR}
+
+                    echo ""
+                    echo "Checking Containerfile:"
+                    test -f ${CONTAINERFILE}
+                '''
+            }
+        }
+
+        stage('Docker Version') {
+            steps {
+                sh '''
+                    docker --version
+                    docker info
+                '''
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+
+                sh '''
+                    docker build \
+                        -f ${CONTAINERFILE} \
+                        -t ${IMAGE_NAME}:${IMAGE_TAG} \
+                        ${APP_DIR}
+                '''
+            }
+        }
+
+        stage('Verify Docker Image') {
+            steps {
+                sh '''
+                    echo "Checking Docker image..."
+
+                    docker image inspect \
+                        ${IMAGE_NAME}:${IMAGE_TAG}
+
+                    echo ""
+                    echo "Docker image:"
+                    docker images ${IMAGE_NAME}
+                '''
+            }
+        }
+
+        stage('Stop Old Container') {
+            steps {
+                sh '''
+                    echo "Removing old container if it exists..."
+
+                    docker rm -f ${CONTAINER_NAME} || true
+                '''
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                echo 'Starting new Docker container...'
+
+                sh '''
+                    docker run -d \
+                        --network host \
+                        --restart unless-stopped \
+                        --name ${CONTAINER_NAME} \
+                        ${IMAGE_NAME}:${IMAGE_TAG}
+                '''
+            }
+        }
+
+        stage('Verify Container') {
+            steps {
+                sh '''
+                    echo "Container status:"
+                    docker ps -a \
+                        --filter "name=${CONTAINER_NAME}"
+
+                    echo ""
+                    echo "Container logs:"
+                    docker logs --tail 50 ${CONTAINER_NAME}
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '======================================'
+            echo 'DEPLOYMENT SUCCESSFUL'
+            echo '======================================'
+        }
+
+        failure {
+            echo '======================================'
+            echo 'DEPLOYMENT FAILED'
+            echo '======================================'
+
+            sh '''
+                docker ps -a || true
+                docker logs ${CONTAINER_NAME} 2>/dev/null || true
+            '''
+        }
+
+        always {
+            echo 'Pipeline finished.'
+        }
+    }
+}
