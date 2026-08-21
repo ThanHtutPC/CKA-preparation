@@ -1,0 +1,1 @@
+kubectl create ingress test-ingress --rule="foo.com/foo*=service1:80" --dry-run=client -o yaml > ingress.yaml
