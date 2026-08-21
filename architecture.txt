@@ -1,0 +1,25 @@
+Developer
+    ↓
+GitLab
+    ↓
+CI Pipeline
+    ↓
+Test
+    ↓
+Build Docker Image
+    ↓
+Security Scan
+    ↓
+Container Registry
+    ↓
+CD Pipeline
+    ↓
+Kubernetes
+    ↓
+Rolling Deployment
+    ↓
+Readiness Check
+    ↓
+Traffic
+    ↓
+Monitoring
