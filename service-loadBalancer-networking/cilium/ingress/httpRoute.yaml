@@ -1,0 +1,46 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: my-routes 
+spec: 
+  parentRefs:
+    - name: gtw
+      namespace: default
+  rules:
+    - matches:
+        - path: 
+            type: PathPrefix
+            value: /products
+          headers: 
+            - name: Host
+              value: shopping.com
+      backendRefs:
+        - name: ecom-products-svc
+          port: 3000
+
+    - matches:
+        - path: 
+            type: PathPrefix
+            value: /cart
+          headers: 
+            - name: Host
+              value: shopping.com
+      backendRefs:
+        - name: ecom-cart-svc
+          port: 3000
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+          headers:
+            - name: Host
+              value: blogger.com
+      backendRefs:
+        - name: ecom-blog-svc
+          port: 3000
+
+    - backendRefs:
+        - name: default-backend-svc
+          port: 80
+

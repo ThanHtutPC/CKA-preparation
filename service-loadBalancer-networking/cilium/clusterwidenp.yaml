@@ -1,0 +1,13 @@
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata: 
+  name: ccnp
+  namespace: dev 
+spec: 
+  endpointSelector: 
+    matchLabels:
+      app: app1
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: app2
