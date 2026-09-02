@@ -1,0 +1,160 @@
+# Cluster 1 Configuration for Cilium ClusterMesh
+cluster:
+  name: cluster1
+  id: 1
+
+# IPAM Configuration
+ipam:
+  mode: kubernetes
+
+# ClusterMesh Configuration
+clustermesh:
+  enable: true
+  apiserver:
+    service:
+      type: NodePort
+    # Optional: Set NodePort explicitly (if you want specific ports)
+    # nodePort: 32379
+
+# KVStoreMesh for etcd synchronization
+kvstoremesh:
+  enable: true
+
+# Hubble for observability
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+    replicas: 1
+  ui:
+    enabled: true
+    replicas: 1
+
+# Enable kube-proxy replacement
+kubeProxyReplacement: true
+
+# CNI Configuration for Kind with disableDefaultCNI
+cni:
+  exclusive: false
+  install: true
+
+# Rollout and wait settings
+rollOutCiliumPods: true
+waitForAPIServer: true
+
+# Resource limits for Kind clusters (conservative)
+operator:
+  replicas: 1
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+cilium-agent:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Enable endpoint health checking
+endpointHealthChecking:
+  enabled: true
+
+# Enable IPv4 only (simpler for Kind)
+ipv4:
+  enabled: true
+ipv6:
+  enabled: false
+
+# Service monitoring
+serviceMonitor:
+  enabled: false
+
+# Prometheus metrics
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+
+# Enable L7 policy enforcement
+l7Proxy: true
+
+# Security context for Kind
+securityContext:
+  capabilities:
+    ciliumAgent:
+      - CHOWN
+      - KILL
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    cleanCiliumState:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
+
+# Enable node init
+nodeinit:
+  enabled: true
+
+# Cgroup configuration for Kind
+cgroup:
+  autoMount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+
+# Enable pod CIDR annotation
+enablePodCIDR: true
+
+# MTU settings for Kind
+mtu: 1500
+
+# Enable well-known identities
+enableWellKnownIdentities: true
+
+# Enable local redirect policy
+enableLocalRedirectPolicy: true
+
+# Enable bandwidth manager
+bandwidthManager:
+  enabled: false
+
+# Enable node selector for Cilium components
+nodeSelector: {}
+tolerations: []
+
+# ClusterMesh specific annotations
+clustermeshApiserver:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Etcd for ClusterMesh
+etcd:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Enable external workloads
+externalWorkloads:
+  enabled: false

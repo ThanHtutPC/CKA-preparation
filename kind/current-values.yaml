@@ -1,0 +1,24 @@
+USER-SUPPLIED VALUES:
+cluster:
+  id: 1
+  name: cluster1
+clustermesh:
+  apiserver:
+    service:
+      type: NodePort
+    tls:
+      auto:
+        enabled: true
+        method: cronJob
+        schedule: 0 0 1 */4 *
+  config:
+    enabled: true
+  useAPIServer: true
+cni:
+  exclusive: false
+ipam:
+  mode: kubernetes
+kubeProxyReplacement: true
+nodeinit:
+  enabled: true
+rollOutCiliumPods: true
