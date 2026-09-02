@@ -1,0 +1,36 @@
+# Enable ClusterMesh
+clustermesh:
+  enable: true
+  apiserver:
+    service:
+      type: NodePort
+
+# Enable KVStoreMesh
+kvstoremesh:
+  enable: true
+
+# Keep existing settings
+cluster:
+  name: cluster2
+  id: 2
+
+ipam:
+  mode: kubernetes
+
+kubeProxyReplacement: true
+
+cni:
+  exclusive: false
+
+nodeinit:
+  enabled: true
+
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+  ui:
+    enabled: true
+
+operator:
+  replicas: 1
