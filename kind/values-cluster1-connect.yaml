@@ -1,0 +1,24 @@
+cluster:
+  name: cluster1
+  id: 1
+
+operator:
+  clusterPoolIPv4PodCIDRList: ["10.1.0.0/16"]
+  clusterPoolIPv4MaskSize: 24
+
+ipam:
+  mode: kubernetes
+
+kubeProxyReplacement: true
+
+clustermesh:
+  enable: true
+  serviceType: LoadBalancer
+  apiserver:
+    replicas: 1
+    service:
+      type: LoadBalancer
+  config:
+    clusters:
+    - name: cluster2
+      address: 10.4.1.151:2379
