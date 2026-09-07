@@ -1,0 +1,15 @@
+cluster:
+  name: cluster2
+  id: 2
+
+kubeProxyReplacement: true
+
+clustermesh:
+  useAPIServer: true
+  config: 
+    enabled: true 
+  apiserver:
+    service: 
+      type: LoadBalancer
+      annotations: {}
+

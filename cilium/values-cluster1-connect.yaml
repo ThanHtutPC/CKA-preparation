@@ -1,0 +1,14 @@
+cluster:
+  name: cluster1
+  id: 1
+
+kubeProxyReplacement: true
+
+clustermesh:
+  useAPIServer: true
+  config: 
+    enabled: true 
+  apiserver:
+    service: 
+      type: NodePort
+      annotations: {}
