@@ -6,23 +6,20 @@ spec:
   ingressClassName: cilium
 
   rules:
-    - host: hello.example.com
+    - host: example.com
       http:
         paths:
-          - path: /
+          - path: /hello
             pathType: Prefix
             backend: 
               service:
                 name: hello-svc
                 port:
                   number: 80
-    - host: web.example.com
-      http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: web-svc
-              port:
-                number: 80 
+          - path: /web
+            pathType: Prefix
+            backend:
+              service:
+                name: web-svc
+                port:
+                  number: 80 

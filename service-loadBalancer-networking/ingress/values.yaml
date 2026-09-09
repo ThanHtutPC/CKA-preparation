@@ -73,12 +73,12 @@ k8sServiceHostRef:
   # -- (string) Key in the ConfigMap containing the Kubernetes service endpoint
   key:
 # -- (string) Kubernetes service host - use "auto" for automatic lookup from the cluster-info ConfigMap
-k8sServiceHost: "172.18.0.2"
+k8sServiceHost: ""
 # @schema
 # type: [string, integer]
 # @schema
 # -- (string) Kubernetes service port
-k8sServicePort: "6443"
+k8sServicePort: ""
 # @schema
 # type: [null, string]
 # @schema
@@ -498,7 +498,7 @@ nat46x64Gateway:
 # -- Configure L2 announcements
 l2announcements:
   # -- Enable L2 announcements
-  enabled: true
+  enabled: false
   # -- If a lease is not renewed for X duration, the current leader is considered dead, a new leader is picked
   # leaseDuration: 15s
   # -- The interval at which the leader will renew the lease
@@ -987,12 +987,12 @@ ingressController:
   enabled: true
   # -- Set cilium ingress controller to be the default ingress controller
   # This will let cilium ingress controller route entries without ingress class set
-  default: true
+  default: true 
   # -- Default ingress load balancer mode
   # Supported values: shared, dedicated
   # For granular control, use the following annotations on the ingress resource:
   # "ingress.cilium.io/loadbalancer-mode: dedicated" (or "shared").
-  loadbalancerMode: shared
+  loadbalancerMode: shared 
   # -- Enforce https for host having matching TLS host in Ingress.
   # Incoming traffic to http listener will return 308 http error code with respective location in header.
   enforceHttps: true
@@ -1094,7 +1094,7 @@ ingressController:
 gatewayAPI:
   # -- Enable support for Gateway API in cilium
   # This will automatically set enable-envoy-config as well.
-  enabled: true
+  enabled: false
   # -- Enable proxy protocol for all GatewayAPI listeners. Note that _only_ Proxy protocol traffic will be accepted once this is enabled.
   enableProxyProtocol: false
   # @schema
@@ -2436,7 +2436,7 @@ readinessProbe:
 # @schema@
 # type: [string, boolean]
 # @schema@
-kubeProxyReplacement: "true"
+kubeProxyReplacement: "false"
 # -- healthz server bind address for the kube-proxy replacement.
 # To enable set the value to '0.0.0.0:10256' for all ipv4
 # addresses and this '[::]:10256' for all ipv6 addresses.

@@ -1,0 +1,16 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata: 
+  name: db-policy
+spec: 
+  endpointSelector:
+    matchLabels:
+      app: db
+  ingress: 
+    - fromEndpoints:
+        - matchLabels:
+            app: backend
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
