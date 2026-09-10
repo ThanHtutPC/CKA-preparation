@@ -1,0 +1,36 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-route-for-web
+spec: 
+  parentRefs:
+    - name: gatewayweb
+  hostnames: 
+    - "web.example.com"
+  rules: 
+    - matches: 
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: web-svc
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-route-for-hello
+spec: 
+  parentRefs:
+    - name: gatewayweb
+  hostnames: 
+    - "hello.example.com"
+  rules: 
+    - matches: 
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: hello-svc
+          port: 80
+
