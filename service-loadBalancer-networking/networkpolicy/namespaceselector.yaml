@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-namespaces
+spec:
+  podSelector: 
+    matchLabels: 
+      app: curl-deployment
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector: 
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: In
+                values: 
+                  - frontend
+                  - backend
