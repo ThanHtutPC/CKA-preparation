@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: hostpath-fileorcreate
+spec: 
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - mountPath: /var/local/aaa
+          name: mydir
+        - mountPath: /var/loca/aaa/1.txt
+          name: myfile
+  volumes:
+    - name: mydir 
+      hostPath: 
+        path: /var/local/aaa/
+        type: DirectoryOrCreate
+    - name: myfile
+      hostPath: 
+        path: /var/local/aaa/test1.txt
+        type: FileOrCreate

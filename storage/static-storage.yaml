@@ -1,0 +1,46 @@
+apiVersion: v1 
+kind: PersistentVolume
+metadata: 
+  name: static-pv 
+  namespace: static-lab
+spec: 
+  capacity:
+    storage: 1Gi
+  accessModes: 
+    - ReadWriteOnce 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath: 
+    path: /data/foo
+---
+# static-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: static-pvc
+  namespace: static-lab
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: static-consumer
+  namespace: static-lab
+spec:
+  containers:
+    - name: consumer
+      image: busybox:1.35
+      command: ['sleep', '3600']
+      volumeMounts:
+        - name: data
+          mountPath: /data
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: static-pvc

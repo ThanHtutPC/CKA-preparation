@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lamp-subpath
+spec: 
+  containers:
+    - name: mysql
+      image: mysql
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "rootpassword"
+      volumeMounts:
+        - name: shared-vol
+          mountPath: /var/lib/mysql
+          subPath: mysql
+    - name: php
+      image: php:7.0-apache
+      volumeMounts:
+        - name: shared-vol
+          mountPath: /var/www/html
+          subPath: html
+  volumes: 
+    - name: shared-vol 
+      persistentVolumeClaim: 
+        claimName: nfs-lab-pvc 
