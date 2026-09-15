@@ -5,16 +5,16 @@ metadata:
 provisioner: rancher.io/local-path
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata: 
-  name: immediate-pvc 
-spec: 
-  accessModes: 
-    - ReadWriteOnce
-  volumeMode: Filesystem 
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: standard 
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata: 
+#  name: immediate-pvc 
+#spec: 
+#  accessModes: 
+#    - ReadWriteOnce
+#  volumeMode: Filesystem 
+#  resources:
+#    requests:
+#      storage: 10Gi
+#  storageClassName: standard 
