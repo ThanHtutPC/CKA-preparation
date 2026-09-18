@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: env-pod
+spec:
+  containers:
+    - name: alpine
+      image: alpine
+      command: ['sleep', '3600']
+      env:
+        - name: app-color
+          valueFrom: 
+            configMapKeyRef:
+              name: game-demo
+              key: APP_COLOR
+        - name: app-mode
+          valueFrom:
+            configMapKeyRef: 
+              name: game-demo
+              key: APP_MODE
+---
+apiVersion: v1 
+kind: Pod 
+metadata: 
+  name: file-pod
+spec:
+  containers:
+    - name: alpine2
+      image: alpine
+      command: ['sleep', '3600']
+      volumeMounts:
+        - mountPath: /data
+          name: config-vol
+  volumes:
+    - name: config-vol
+      configMap:
+        name: file-config 
