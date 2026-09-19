@@ -1,0 +1,1 @@
+kubectl create pvc pvc-log --access-mode=ReadWriteOnce --storage-class=manual --request=500Mi
