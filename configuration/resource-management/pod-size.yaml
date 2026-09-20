@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod 
+metadata: 
+  name: pod-size
+spec: 
+  resources:
+    requests:
+      memory: '500Mi'
+      cpu: '500m'
+    limits: 
+      memory: '1Gi' 
+      cpu: '1000m'
+  containers:
+    - name: alpine
+      image: alpine
+      command: ['sh', '-c', 'sleep infinity']
+  containers:
+    - name: alpine2
+      image: alpine
+      command: ['sh', '-c', 'sleep infinity']
