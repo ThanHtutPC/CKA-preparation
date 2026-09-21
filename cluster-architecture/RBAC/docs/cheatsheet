@@ -1,0 +1,41 @@
+# ---- CREATE ----
+# Role
+kubectl create role pod-reader \
+  --verb=get,list,watch \
+  --resource=pods \
+  -n my-namespace
+
+# ClusterRole
+kubectl create clusterrole node-reader \
+  --verb=get,list \
+  --resource=nodes
+
+# RoleBinding (to Role)
+kubectl create rolebinding pod-reader-binding \
+  --role=pod-reader \
+  --user=jane \
+  -n my-namespace
+
+# RoleBinding (to ClusterRole)
+kubectl create rolebinding clusterrole-binding \
+  --clusterrole=view \
+  --user=jane \
+  -n my-namespace
+
+# ClusterRoleBinding
+kubectl create clusterrolebinding cluster-admin-binding \
+  --clusterrole=cluster-admin \
+  --user=admin-user
+
+# ---- VERIFY ----
+kubectl auth can-i list pods --as=jane -n my-namespace
+kubectl auth can-i --list --as=jane -n my-namespace
+kubectl auth can-i get secrets --as=system:serviceaccount:ns:sa -A
+
+# ---- INSPECT ----
+kubectl get roles -n my-namespace
+kubectl get rolebindings -n my-namespace
+kubectl get clusterroles
+kubectl get clusterrolebindings
+kubectl describe role pod-reader -n my-namespace
+kubectl describe clusterrole cluster-admin

@@ -1,0 +1,1 @@
+"Create a ServiceAccount named "processor" in namespace "project-hamster". Create a Role named "processor" that allows get, list, and watch on secrets and configmaps. Create a RoleBinding that binds the Role to the ServiceAccount."
