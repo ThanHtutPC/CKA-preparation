@@ -1,0 +1,1 @@
+Your cluster has a single control plane node. You must upgrade the control plane from v1.34.x to v1.35.y. After upgrading the kubeadm package on the control plane node, list the commands you must run. 
