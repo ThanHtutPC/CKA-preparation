@@ -1,0 +1,27 @@
+# Initialize HA control plane
+sudo kubeadm init --control-plane-endpoint "LB:6443" --upload-certs
+
+# Join additional control plane node
+kubeadm join LB:6443 --token <token> \
+  --discovery-token-ca-cert-hash sha256:<hash> \
+  --control-plane --certificate-key <key>
+
+# Regenerate certificate key
+sudo kubeadm init phase upload-certs --upload-certs
+
+# Check etcd health
+ETCDCTL_API=3 etcdctl endpoint health --cluster \
+  --endpoints=https://<ip1>:2379,https://<ip2>:2379,https://<ip3>:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key
+
+# List etcd members
+ETCDCTL_API=3 etcdctl member list -w table \
+  --endpoints=https://<ip1>:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key
+
+# Check control plane pods
+kubectl get pods -n kube-system | grep -E "etcd|apiserver|scheduler|controller"

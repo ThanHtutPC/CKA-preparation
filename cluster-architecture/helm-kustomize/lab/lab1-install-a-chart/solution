@@ -1,0 +1,6 @@
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm search repo nginx 
+helm search repo bitnami 
+helm install nginx bitnami/nginx --version 15.0.0 --namespace web
+helm list -n web 
+kubectl get pod -n web

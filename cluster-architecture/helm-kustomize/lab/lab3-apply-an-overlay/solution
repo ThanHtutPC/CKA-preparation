@@ -1,0 +1,6 @@
+ls /opt/manifests/app
+cat /opt/manifests/app/kustomization.yaml 
+
+kubectl apply -k /opt/manifests/app
+
+kubectl get all

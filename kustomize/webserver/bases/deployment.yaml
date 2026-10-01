@@ -1,0 +1,24 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: httpd 
+spec: 
+  replicas: 3 
+  selector:
+    matchLabels:
+      app: httpd 
+  template:
+    metadata:
+      labels:
+        app: httpd  
+    spec:
+      volumes:
+      - name: landing-page
+        configMap: 
+          name: httpd-cm
+      containers: 
+      - name: httpd 
+        image: httpd
+        volumeMounts:
+        - name: landing-page
+          mountPath: /usr/local/apache2/htdocs

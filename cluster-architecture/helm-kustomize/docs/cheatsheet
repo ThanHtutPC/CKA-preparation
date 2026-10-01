@@ -1,0 +1,6 @@
+helm repo add <name> <url>	- add chart repo
+helm search repo <name>/<chart> --versions	- list available
+helm install <release> <chart> --version <v> -n <ns> --create-namespace		- install specific version
+helm upgrade <release> <chart> -f values.yaml	- upgrade with custom values 
+kubectl apply -k <dir>	- apply kustomize
+kubectl kustomize <dir>		- preview rendered output

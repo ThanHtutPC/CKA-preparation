@@ -1,0 +1,34 @@
+# Create a deployment
+kubectl create deployment nginx --image=nginx --replicas=3
+
+# Scale
+kubectl scale deployment nginx --replicas=5
+
+# Rolling update
+kubectl set image deployment/nginx nginx=nginx:1.25
+
+# Rollback
+kubectl rollout undo deployment/nginx
+
+# Check status
+kubectl rollout status deployment/nginx
+
+
+
+
+
+# Create a Job that runs a command once
+kubectl create job my-job --image=busybox -- echo "hello"
+
+# Generate YAML for a Job (better for complex configs)
+kubectl create job my-job --image=busybox --dry-run=client -o yaml -- sh -c "sleep 5; echo done" > job.yaml
+
+
+
+
+
+# Create a CronJob that runs every minute
+kubectl create cronjob my-cron --image=busybox --schedule="*/1 * * * *" -- date
+
+# Generate YAML
+kubectl create cronjob my-cron --image=busybox --schedule="*/1 * * * *" --dry-run=client -o yaml -- date > cronjob.yaml

@@ -1,0 +1,17 @@
+# Step 1: Add the provided repository (URL will be given in exam)
+helm repo add <repo-name> <repo-url>
+helm repo update
+
+# Step 2: Install the chart
+helm install <release-name> <repo-name>/<chart-name> --namespace <namespace> --create-namespace
+
+# Step 3: Check release status
+helm list -n <namespace>
+helm status <release-name> -n <namespace>
+
+# Step 4: Verify deployed resources
+kubectl get all -n <namespace>
+
+# Step 5: If Kustomize patches are needed, inspect and apply
+# (Check for kustomization.yaml in the specified directory)
+kubectl apply -k <path-to-kustomize-dir>

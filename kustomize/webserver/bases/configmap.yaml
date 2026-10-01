@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: httpd-cm
+data:
+  index.html: | 
+    <!DOCTYPE html>
+    <html>
+    <h1>Hello World</h1>
+    <p>Simple text.</p>
+    </html>
+

@@ -1,0 +1,1 @@
+You have a 3-node control plane HA cluster. The certificate key used to join the other control plane nodes has expired. Generate a new certificate key and show the full join command for a new control plane node.

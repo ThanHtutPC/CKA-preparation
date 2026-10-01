@@ -1,0 +1,11 @@
+https://kubernetes.io/docs/concepts/workloads/
+
+https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
+https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+
+https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+
+https://kubernetes.io/docs/concepts/workloads/controllers/job/
+
+https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/

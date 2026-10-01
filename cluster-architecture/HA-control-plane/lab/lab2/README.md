@@ -1,0 +1,1 @@
+You are initializing the first control plane node in an HA cluster. The load balancer endpoint is 192.168.0.200:6443. Certificates must be automatically uploaded for other control plane nodes to join. Write the complete kubeadm init command.

@@ -1,0 +1,1 @@
+Verify the health of all etcd members in a 3-node HA cluster. The etcd endpoints are 192.168.0.11:2379, 192.168.0.12:2379, and 192.168.0.13:2379. Write the complete etcdctl command with all required TLS flags.
