@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: db-backup
+  namespace: ops
+spec:
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: postgres
+            image: postgres:15
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - pg_dump -U admin mydb > /backup/db.sql
+          restartPolicy: OnFailure
+

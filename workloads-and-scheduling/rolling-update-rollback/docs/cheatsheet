@@ -1,0 +1,16 @@
+## scale
+kubectl scale deploy web --replicas=5
+kubectl autoscale deploy web --min=2 --max=10 --cpu-percent=70
+
+## rolling update
+kubectl set image deploy/web web=nginx:1.26
+kubectl rollout status deploy/web
+kubectl rollout pause  deploy/web
+kubectl rollout resume deploy/web 
+
+## rollback 
+kubectl rollout history deploy/web
+kubectl rollout history deploy/web --revision=2
+kubectl rollout undo    deploy/web
+kubectl rollout undo    deploy/web --to-revision=1
+kubectl rollout restart deploy/web

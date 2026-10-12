@@ -1,0 +1,23 @@
+- Workloads overview
+  https://kubernetes.io/docs/concepts/workloads/
+
+- Deployments
+  https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
+- ReplicaSet
+  https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
+
+- DaemonSet
+  https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+
+- StatefulSet
+  https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+
+- Job
+  https://kubernetes.io/docs/concepts/workloads/controllers/job/
+
+- CronJob
+  https://kubernetes.io/docs/concepts/workloads/controllers/cronjob/
+
+- Pod
+  https://kubernetes.io/docs/concepts/workloads/pods/
