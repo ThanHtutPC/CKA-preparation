@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  completions: 6
+  parallelism: 2
+  backoffLimit: 4
+  activeDeadlineSeconds: 300
+  ttlSecondsAfterFinished: 120
+  template:
+    metadata:
+      labels: { job-name: pi }
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: pi
+          image: perl:5.38
+          command:
+            - perl
+            - -Mbignum=bpi
+            - -wle
+            - "print bpi(2000)"
+          resources:
+            requests: { cpu: "100m", memory: "64Mi" }
+            limits:   { cpu: "500m", memory: "256Mi" }

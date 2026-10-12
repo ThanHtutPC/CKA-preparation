@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-svc
+  labels:
+    app: node-svc
+  namespace: db-svc 
+spec:
+  ports:
+  - port: 3306
+    name: mysql 
+  clusterIP: None
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-state
+  namespace: db-svc 
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  serviceName: node-svc
+  replicas: 2
+  minReadySeconds: 10 
+  template:
+    metadata:
+      labels:
+        app: mysql 
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: 'iadmin'
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-path
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-path 
+    spec:
+      accessModes: 
+        - "ReadWriteOnce" 
+      storageClassName: "standard"
+      resources:
+        requests:
+          storage: 1Gi
+

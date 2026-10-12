@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata: 
+  name: node-monitor
+  labels:
+    name: monitor-node
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: monitor-node
+  template:
+    metadata:
+      labels:
+        name: monitor-node
+    spec:
+      volumes:
+      - name: proc-log
+        hostPath:
+          path: /proc
+      containers:
+      - name: node-exporter
+        image: prom/node-exporter:v1.6.1
+        ports: 
+          - containerPort: 9100
+        volumeMounts:
+        - name: proc-log
+          mountPath: /host/proc
+          readOnly: true
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution: 
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: monitoring
+                values:
+                - "true"
+                operator: In
