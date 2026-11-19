@@ -1,1 +1,0 @@
-Your team uses Helm to install cluster components and Kustomize for environment-specific patches. The question provides a Helm repository URL. Install a chart from this repository, then verify the release status. After installation, check if any Kustomize-based patches are needed.

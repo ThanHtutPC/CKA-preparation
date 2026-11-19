@@ -1,0 +1,16 @@
+services:
+  cka-study-planner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cka-study-planner
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+# Persistence note:
+# - This application stores user progress/notes/settings in the browser (LocalStorage), not on the server.
+# - Restarting/recreating this container does NOT remove browser LocalStorage data.
+# - To preserve study data reliably across browser/device changes, use the app's Settings > Export JSON (backup)
+#   and import it when needed.
+# - If you later add a backend/database, mount a volume for that database's data directory.

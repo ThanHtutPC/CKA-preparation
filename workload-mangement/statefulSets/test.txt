@@ -1,4 +1,0 @@
-whenDeleted = delete statefulset 
-whenScaled = down replicaset 
-Delete = delete PVC 
-Retain = keep PVC 

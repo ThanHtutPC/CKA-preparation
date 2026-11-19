@@ -1,0 +1,80 @@
+[
+  {
+    "id": "cluster-arch",
+    "name": "Cluster Architecture, Installation & Configuration",
+    "nameMm": "Cluster Architecture, Installation & Configuration",
+    "weight": 25,
+    "description": "Design, install, configure, and manage Kubernetes clusters and cluster components.",
+    "descriptionMm": "Kubernetes cluster များနှင့် cluster components များကို ဒီဇိုင်းဆွဲခြင်း၊ တပ်ဆင်ခြင်း၊ ပြင်ဆင်သတ်မှတ်ခြင်းနှင့် စီမံခန့်ခွဲခြင်း။",
+    "competencies": [
+      "Manage role based access control (RBAC)",
+      "Prepare underlying infrastructure for installing a Kubernetes cluster",
+      "Create and manage Kubernetes clusters using kubeadm",
+      "Manage the lifecycle of Kubernetes clusters",
+      "Implement and configure a highly-available control plane",
+      "Use Helm and Kustomize to install cluster components",
+      "Understand extension interfaces (CNI, CSI, CRI, etc.)",
+      "Understand CRDs, install and configure operators"
+    ],
+    "examVersionNote": "Based on CNCF CKA Curriculum v1.37 / Linux Foundation CKA competencies (exam environment aligned to recent Kubernetes minor versions)."
+  },
+  {
+    "id": "workloads",
+    "name": "Workloads & Scheduling",
+    "nameMm": "Workloads & Scheduling",
+    "weight": 15,
+    "description": "Deploy and manage applications and configure scheduling behavior.",
+    "descriptionMm": "Application များကို deploy လုပ်ခြင်း၊ စီမံခြင်းနှင့် scheduling behavior များကို ပြင်ဆင်သတ်မှတ်ခြင်း။",
+    "competencies": [
+      "Understand application deployments and how to perform rolling update and rollbacks",
+      "Use ConfigMaps and Secrets to configure applications",
+      "Configure workload autoscaling",
+      "Understand the primitives used to create robust, self-healing, application deployments",
+      "Configure Pod admission and scheduling (limits, node affinity, etc.)"
+    ]
+  },
+  {
+    "id": "networking",
+    "name": "Services & Networking",
+    "nameMm": "Services & Networking",
+    "weight": 20,
+    "description": "Configure networking, service exposure, and traffic management for cluster workloads.",
+    "descriptionMm": "Cluster workloads များအတွက် networking, service exposure နှင့် traffic management ကို ပြင်ဆင်သတ်မှတ်ခြင်း။",
+    "competencies": [
+      "Understand connectivity between Pods",
+      "Define and enforce Network Policies",
+      "Use ClusterIP, NodePort, LoadBalancer service types and endpoints",
+      "Use the Gateway API to manage Ingress traffic",
+      "Know how to use Ingress controllers and Ingress resources",
+      "Understand and use CoreDNS"
+    ]
+  },
+  {
+    "id": "storage",
+    "name": "Storage",
+    "nameMm": "Storage",
+    "weight": 10,
+    "description": "Provision and manage storage resources for stateful workloads.",
+    "descriptionMm": "Stateful workloads များအတွက် storage resources များကို provision လုပ်ခြင်းနှင့် စီမံခြင်း။",
+    "competencies": [
+      "Implement storage classes and dynamic volume provisioning",
+      "Configure volume types, access modes and reclaim policies",
+      "Manage persistent volumes and persistent volume claims"
+    ]
+  },
+  {
+    "id": "troubleshooting",
+    "name": "Troubleshooting",
+    "nameMm": "Troubleshooting",
+    "weight": 30,
+    "description": "Diagnose and resolve issues across applications, nodes, control plane, networking, and cluster services.",
+    "descriptionMm": "Applications, nodes, control plane, networking နှင့် cluster services များတွင် ဖြစ်ပေါ်သော ပြဿနာများကို ရှာဖွေဖော်ထုတ်ပြီး ဖြေရှင်းခြင်း။",
+    "competencies": [
+      "Troubleshoot clusters and nodes",
+      "Troubleshoot cluster components",
+      "Monitor cluster and application resource usage",
+      "Manage and evaluate container output streams",
+      "Troubleshoot services and networking"
+    ]
+  }
+]

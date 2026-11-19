@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: List
-metadata:
-items:
-- apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    name: processor
-    namespace: project-hamster

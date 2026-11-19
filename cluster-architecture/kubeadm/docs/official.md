@@ -1,1 +1,0 @@
-https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/

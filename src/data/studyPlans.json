@@ -1,0 +1,49 @@
+{
+  "templates": [
+    {
+      "id": "30",
+      "name": "30-Day Intensive Plan",
+      "totalDays": 30,
+      "description": "High-intensity daily plan focused on exam-weighted domains, hands-on labs, and frequent revision.",
+      "weeklyAssessmentDay": 7,
+      "mockExamDays": [14, 24, 29],
+      "blocks": [
+        {"label":"Week 1 - Architecture & Cluster Operations","days":[1,7],"domainFocus":["cluster-arch"],"theoryPerDay":1.5,"labPerDay":2.5,"revisionPerDay":0.5},
+        {"label":"Week 2 - Workloads, Scheduling & Services","days":[8,14],"domainFocus":["workloads","networking"],"theoryPerDay":1.5,"labPerDay":2.5,"revisionPerDay":0.5},
+        {"label":"Week 3 - Storage & Troubleshooting","days":[15,21],"domainFocus":["storage","troubleshooting"],"theoryPerDay":1,"labPerDay":3,"revisionPerDay":0.5},
+        {"label":"Week 4 - Mixed Scenarios & Mocks","days":[22,30],"domainFocus":["cluster-arch","workloads","networking","storage","troubleshooting"],"theoryPerDay":0.5,"labPerDay":3,"revisionPerDay":1}
+      ]
+    },
+    {
+      "id": "60",
+      "name": "60-Day Standard Plan",
+      "totalDays": 60,
+      "description": "Balanced plan with steady progression, regular labs, and revision cycles.",
+      "weeklyAssessmentDay": 7,
+      "mockExamDays": [28, 45, 56],
+      "blocks": [
+        {"label":"Days 1-12 - Cluster Architecture","days":[1,12],"domainFocus":["cluster-arch"],"theoryPerDay":1,"labPerDay":1.5,"revisionPerDay":0.5},
+        {"label":"Days 13-24 - Workloads & Scheduling","days":[13,24],"domainFocus":["workloads"],"theoryPerDay":1,"labPerDay":1.5,"revisionPerDay":0.5},
+        {"label":"Days 25-36 - Services & Networking","days":[25,36],"domainFocus":["networking"],"theoryPerDay":1,"labPerDay":1.5,"revisionPerDay":0.5},
+        {"label":"Days 37-45 - Storage","days":[37,45],"domainFocus":["storage"],"theoryPerDay":0.8,"labPerDay":1.5,"revisionPerDay":0.5},
+        {"label":"Days 46-60 - Troubleshooting & Full Mocks","days":[46,60],"domainFocus":["troubleshooting","cluster-arch","workloads","networking","storage"],"theoryPerDay":0.5,"labPerDay":2,"revisionPerDay":0.5}
+      ]
+    },
+    {
+      "id": "90",
+      "name": "90-Day Comfortable Plan",
+      "totalDays": 90,
+      "description": "Comfortable pace with deeper theory, repeated hands-on practice, and spaced revision.",
+      "weeklyAssessmentDay": 7,
+      "mockExamDays": [35, 63, 84, 89],
+      "blocks": [
+        {"label":"Days 1-20 - Cluster Architecture & Installation","days":[1,20],"domainFocus":["cluster-arch"],"theoryPerDay":1,"labPerDay":1,"revisionPerDay":0.25},
+        {"label":"Days 21-35 - Workloads & Scheduling","days":[21,35],"domainFocus":["workloads"],"theoryPerDay":1,"labPerDay":1,"revisionPerDay":0.25},
+        {"label":"Days 36-50 - Services & Networking","days":[36,50],"domainFocus":["networking"],"theoryPerDay":1,"labPerDay":1,"revisionPerDay":0.25},
+        {"label":"Days 51-60 - Storage","days":[51,60],"domainFocus":["storage"],"theoryPerDay":0.75,"labPerDay":1,"revisionPerDay":0.25},
+        {"label":"Days 61-80 - Troubleshooting Deep Dive","days":[61,80],"domainFocus":["troubleshooting"],"theoryPerDay":0.5,"labPerDay":1.5,"revisionPerDay":0.25},
+        {"label":"Days 81-90 - Revision & Mock Exams","days":[81,90],"domainFocus":["cluster-arch","workloads","networking","storage","troubleshooting"],"theoryPerDay":0.25,"labPerDay":1.5,"revisionPerDay":0.75}
+      ]
+    }
+  ]
+}

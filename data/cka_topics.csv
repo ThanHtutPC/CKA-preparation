@@ -1,0 +1,317 @@
+id,domainId,name,description,descriptionMm,theory,theoryMm,concepts,commands,yamlExample,practicalExercises,labIds,expectedOutcomes,estimatedHours,difficulty,examRequired,supplementaryNote
+t-arch-overview,cluster-arch,Kubernetes Architecture,"Understand the overall architecture of a Kubernetes cluster, including control plane and worker nodes.",Kubernetes cluster ၏ အလုံးစုံ architecture ကို နားလည်ရန် (control plane နှင့် worker nodes အပါအဝင်)။,"A Kubernetes cluster consists of a control plane and worker nodes. The control plane makes global decisions about the cluster, while worker nodes run application workloads in Pods.",Kubernetes cluster တစ်ခုတွင် control plane နှင့် worker nodes ပါဝင်သည်။ Control plane သည် cluster အဆင့် ဆုံးဖြတ်ချက်များကို လုပ်ဆောင်ပြီး worker nodes များသည် application workloads များကို Pods အဖြစ် run လုပ်သည်။ Cluster ၏ desired state ကို API server မှတစ်ဆင့် declare လုပ်ပြီး controllers များက actual state ကို reconcile လုပ်သည်။,"[""Cluster"",""Control Plane"",""Worker Node"",""Desired State"",""Reconciliation"",""API-driven architecture""]","[""kubectl cluster-info"",""kubectl get nodes -o wide"",""kubectl get componentstatuses""]","# Kubernetes resources are declared via YAML manifests
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.27","[""Inspect cluster information and node roles."",""Identify control plane and worker components running in the cluster.""]","[""lab-arch-overview""]","[""Explain control plane vs worker node responsibilities."",""Use kubectl to inspect cluster topology.""]",2,Beginner,true,
+t-control-plane-components,cluster-arch,Control Plane Components,"Learn the roles of kube-apiserver, etcd, kube-scheduler, and kube-controller-manager.","kube-apiserver, etcd, kube-scheduler နှင့် kube-controller-manager တို့၏ အခန်းကဏ္ဍများကို လေ့လာရန်။","The control plane manages cluster state and workload placement. Core components include the API server (front end), etcd (state store), scheduler (pod placement), and controller manager (reconciliation loops).",Control plane သည် cluster state နှင့် workload placement ကို စီမံသည်။ kube-apiserver သည် Kubernetes API ၏ entry point ဖြစ်ပြီး etcd တွင် cluster data ကို သိမ်းဆည်းသည်။ kube-scheduler သည် unscheduled Pods များကို nodes များသို့ ချိတ်ဆက်ပေးပြီး kube-controller-manager သည် controllers များကို run လုပ်ကာ desired state ကို ထိန်းသိမ်းသည်။,"[""kube-apiserver"",""etcd"",""kube-scheduler"",""kube-controller-manager"",""Controllers"",""Cluster state""]","[""kubectl get pods -n kube-system"",""kubectl describe pod <control-plane-pod> -n kube-system"",""kubectl logs <component-pod> -n kube-system""]","# Static Pod manifest path (kubeadm clusters, example)
+# /etc/kubernetes/manifests/kube-apiserver.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-apiserver
+  namespace: kube-system
+spec:
+  containers:
+  - name: kube-apiserver
+    image: registry.k8s.io/kube-apiserver:v1.30.0
+    command:
+    - kube-apiserver","[""Locate control plane static pod manifests."",""Inspect logs of scheduler or controller manager.""]","[""lab-control-plane""]","[""Identify each control plane component and its function."",""Troubleshoot basic control plane component issues.""]",3,Intermediate,true,
+t-worker-components,cluster-arch,"Worker Node Components (kubelet, kube-proxy, Container Runtime)",Understand node-level components that run and network Pods.,Pods များကို run လုပ်ရန်နှင့် network ချိတ်ဆက်ရန် node-level components များကို နားလည်ရန်။,"Worker nodes run kubelet, kube-proxy (or equivalent dataplane), and a container runtime implementing CRI. kubelet ensures containers are running in Pods; kube-proxy/service dataplane enables Service networking.","Worker node တိုင်းတွင် kubelet, container runtime (CRI) နှင့် Service networking အတွက် kube-proxy သို့မဟုတ် အခြား dataplane component ပါဝင်သည်။ kubelet သည် PodSpecs အတိုင်း containers များ run ဖြစ်နေစေရန် တာဝန်ယူပြီး container runtime သည် image pull/run လုပ်ဆောင်သည်။ kube-proxy/eBPF dataplane များသည် Service virtual IP routing ကို ဆောင်ရွက်သည်။","[""kubelet"",""kube-proxy"",""CRI"",""containerd"",""Node status"",""Pod lifecycle on node""]","[""kubectl describe node <node>"",""kubectl get pods -n kube-system -o wide"",""systemctl status kubelet"",""journalctl -u kubelet -l --no-pager""]","# Node object is managed by the system; labels/taints can be configured
+apiVersion: v1
+kind: Node
+metadata:
+  name: worker-1
+  labels:
+    kubernetes.io/hostname: worker-1","[""Check kubelet health and node conditions."",""Inspect node capacity/allocatable resources.""]","[""lab-node-components""]","[""Explain kubelet and runtime responsibilities."",""Diagnose common node NotReady causes.""]",2,Intermediate,true,
+t-kubeadm,cluster-arch,kubeadm Cluster Installation & Lifecycle,"Create and manage Kubernetes clusters using kubeadm, including upgrades and node management.",kubeadm အသုံးပြုပြီး Kubernetes cluster များ တည်ဆောက်ခြင်း၊ အဆင့်မြှင့်ခြင်းနှင့် node များ စီမံခြင်း။,"kubeadm bootstraps a conformant Kubernetes cluster. Administrators use it to initialize control plane nodes, join worker nodes, and perform version upgrades following the cluster lifecycle workflow.","kubeadm သည် Kubernetes cluster ကို bootstrap လုပ်ရန် official tool ဖြစ်သည်။ `kubeadm init` ဖြင့် control plane ကို စတင်တည်ဆောက်နိုင်ပြီး `kubeadm join` ဖြင့် nodes များကို cluster ထဲသို့ ပေါင်းထည့်နိုင်သည်။ Cluster lifecycle management တွင် version upgrade, certificate management, node drain/uncordon စသည်တို့ ပါဝင်သည်။","[""kubeadm init"",""kubeadm join"",""Bootstrap tokens"",""Cluster upgrade"",""Drain/Cordon"",""Certificates""]","[""kubeadm init --pod-network-cidr=10.244.0.0/16"",""kubeadm token create --print-join-command"",""kubeadm join <endpoint> --token <t> --discovery-token-ca-cert-hash sha256:<hash>"",""kubectl drain <node> --ignore-daemonsets"",""kubectl uncordon <node>"",""kubeadm upgrade plan"",""kubeadm upgrade apply <version>""]","# ClusterConfiguration example (conceptual)
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+kubernetesVersion: v1.30.0
+networking:
+  podSubnet: 10.244.0.0/16","[""Review kubeadm init/join workflow."",""Practice draining a node before maintenance and uncordoning after.""]","[""lab-kubeadm""]","[""Describe kubeadm-based cluster bootstrap steps."",""Perform safe node maintenance operations.""]",4,Advanced,true,
+t-ha-control-plane,cluster-arch,Highly-Available Control Plane,Implement and understand HA control plane patterns and considerations.,Highly-available control plane ပုံစံများနှင့် လိုက်နာရမည့် အချက်များကို နားလည်ပြီး အကောင်အထည်ဖော်ရန်။,HA control plane setups run multiple control plane nodes with load-balanced API access and resilient etcd quorum. This reduces single points of failure for cluster management.,HA control plane တွင် control plane nodes အများအပြားကို run လုပ်ပြီး API server အရှေ့တွင် load balancer ထားကာ etcd quorum ကို ထိန်းသိမ်းထားသည်။ kubeadm ဖြင့် stacked etcd သို့မဟုတ် external etcd topology များကို အသုံးပြုနိုင်ပြီး availability နှင့် failure scenarios ကို နားလည်ထားရမည်။,"[""HA topology"",""Load balancer for API server"",""etcd quorum"",""Stacked vs external etcd"",""Failure domains""]","[""kubectl get nodes"",""kubectl get endpoints kube-scheduler -n kube-system -o yaml"",""kubectl get leases -n kube-system""]","# HA requires infrastructure/load balancer configuration outside a single manifest.
+# kubeadm control-plane join example:
+# kubeadm join <lb-endpoint>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash> --control-plane --certificate-key <key>","[""Identify HA components in a multi-control-plane cluster."",""Explain impact of losing one control plane node.""]","[""lab-ha""]","[""Understand HA control plane requirements."",""Recognize quorum-related risks for etcd/control plane.""]",3,Advanced,true,
+t-rbac,cluster-arch,RBAC (Role-Based Access Control),"Manage authorization using Roles, ClusterRoles, and bindings.","Roles, ClusterRoles နှင့် bindings များကို အသုံးပြုပြီး authorization ကို စီမံရန်။","RBAC regulates access to Kubernetes API resources based on roles and bindings. Roles/ClusterRoles define permissions; RoleBindings/ClusterRoleBindings grant them to users, groups, or service accounts.","RBAC သည် Kubernetes API resources များကို မည်သူက ဘာလုပ်ခွင့်ရှိသည်ကို ထိန်းချုပ်သည်။ Role/ClusterRole တွင် rules (verbs, resources, apiGroups) ကို သတ်မှတ်ပြီး RoleBinding/ClusterRoleBinding ဖြင့် subjects (User, Group, ServiceAccount) များထံ ခွင့်ပြုချက်များ ပေးအပ်သည်။ Namespace-scoped နှင့် cluster-scoped ကွာခြားချက်ကို နားလည်ရန် အရေးကြီးသည်။","[""Role"",""ClusterRole"",""RoleBinding"",""ClusterRoleBinding"",""ServiceAccount"",""Verbs and resources"",""Least privilege""]","[""kubectl create role pod-reader --verb=get,list,watch --resource=pods -n dev"",""kubectl create rolebinding read-pods --role=pod-reader --user=jane -n dev"",""kubectl auth can-i get pods --as jane -n dev"",""kubectl get roles,rolebindings -A""]","apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: dev
+  name: pod-reader
+rules:
+- apiGroups: [""""]
+  resources: [""pods""]
+  verbs: [""get"", ""watch"", ""list""]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: dev
+subjects:
+- kind: User
+  name: jane
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io","[""Create namespace-scoped read access for a user/service account."",""Verify permissions with kubectl auth can-i.""]","[""lab-rbac""]","[""Design minimal RBAC rules for a task."",""Debug authorization failures.""]",3,Intermediate,true,
+t-etcd-backup-restore,cluster-arch,etcd Backup and Restore,Back up and restore etcd data to recover cluster state.,Cluster state ကို ပြန်လည်ရယူနိုင်ရန် etcd data ကို backup/restore လုပ်ခြင်း။,etcd stores Kubernetes cluster state. Regular snapshots and tested restore procedures are critical for disaster recovery in kubeadm-managed clusters.,"etcd သည် Kubernetes cluster ၏ အဓိက state store ဖြစ်သောကြောင့် snapshot backup နှင့် restore လုပ်နည်းကို ကျွမ်းကျင်ရမည်။ `etcdctl snapshot save` ဖြင့် backup ယူနိုင်ပြီး restore လုပ်ရာတွင် data directory, manifests/certs နှင့် static pod configuration များကို သေချာစွာ ကိုင်တွယ်ရသည်။","[""etcd snapshot"",""etcdctl"",""Disaster recovery"",""Certificates/endpoints"",""Restore workflow""]","[""ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key snapshot save /tmp/etcd-snapshot.db"",""ETCDCTL_API=3 etcdctl snapshot status /tmp/etcd-snapshot.db --write-out=table"",""ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd-snapshot.db --data-dir=/var/lib/etcd-restore""]","# etcd restore is an operational procedure; static pod manifest may reference data dir
+# /etc/kubernetes/manifests/etcd.yaml (volume/hostPath for data-dir must match restore location)","[""Take an etcd snapshot using correct cert flags."",""Inspect snapshot status and explain restore steps.""]","[""lab-etcd""]","[""Perform an etcd backup command correctly."",""Explain safe restore considerations.""]",3,Advanced,true,
+t-helm-kustomize,cluster-arch,Helm and Kustomize,Use Helm and Kustomize to install and customize cluster/application components.,Cluster/application components များကို install နှင့် customize လုပ်ရန် Helm နှင့် Kustomize ကို အသုံးပြုခြင်း။,Helm is a package manager for Kubernetes charts; Kustomize provides template-free customization of YAML manifests using overlays. Both are commonly used to manage configurations.,Helm သည် Kubernetes applications/components များကို chart packages အဖြစ် install/upgrade/rollback လုပ်နိုင်စေသည်။ Kustomize သည် base manifests များအပေါ် overlay/patch များဖြင့် configuration ပြောင်းလဲနိုင်စေပြီး `kubectl apply -k` ဖြင့် အသုံးပြုနိုင်သည်။ Exam တွင် cluster components installation/customization အတွက် အသုံးပြုတတ်ရန် လိုအပ်သည်။,"[""Helm chart"",""Release"",""Values"",""Kustomization"",""Base/Overlay"",""kubectl apply -k""]","[""helm repo add bitnami https://charts.bitnami.com/bitnami"",""helm repo update"",""helm install my-release bitnami/nginx"",""helm upgrade my-release bitnami/nginx -f values.yaml"",""helm uninstall my-release"",""kubectl kustomize ./overlay"",""kubectl apply -k ./overlay""]","# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- deployment.yaml
+namePrefix: dev-
+commonLabels:
+  app: web","[""Install/upgrade/uninstall a Helm release."",""Apply a Kustomize overlay to modify image/tag or replicas.""]","[""lab-helm-kustomize""]","[""Choose Helm or Kustomize for a given customization need."",""Perform basic chart and kustomize operations.""]",3,Intermediate,true,
+t-crds-operators-ext,cluster-arch,"CRDs, Operators, and Extension Interfaces (CNI/CSI/CRI)",Understand Kubernetes extensibility via CRDs/operators and core extension interfaces.,CRDs/operators နှင့် CNI/CSI/CRI ကဲ့သို့ extension interfaces များမှတစ်ဆင့် Kubernetes extensibility ကို နားလည်ရန်။,"Kubernetes can be extended with CustomResourceDefinitions (CRDs) and controllers/operators. CNI, CSI, and CRI define standard interfaces for networking, storage, and container runtimes.","CRD များက Kubernetes API ကို custom resource types ဖြင့် တိုးချဲ့ပေးပြီး operator/controller များက ထို resources များ၏ desired state ကို reconcile လုပ်သည်။ CNI (networking), CSI (storage), CRI (container runtime) တို့သည် pluggable interfaces များဖြစ်ပြီး cluster components များနှင့် ecosystem tools များ အလုပ်လုပ်ပုံကို နားလည်ရန် အထောက်အကူဖြစ်သည်။","[""CRD"",""Custom Resource"",""Operator"",""Controller"",""CNI"",""CSI"",""CRI""]","[""kubectl get crd"",""kubectl api-resources | grep <name>"",""kubectl describe crd <crd-name>"",""kubectl get pods -n kube-system""]","apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.stable.example.com
+spec:
+  group: stable.example.com
+  scope: Namespaced
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object","[""List installed CRDs and inspect one."",""Identify which CNI/CSI components are running in the cluster.""]","[""lab-crds-ext""]","[""Explain purpose of CRDs/operators and extension interfaces."",""Interact with custom resources using kubectl.""]",2,Intermediate,true,
+t-pods-workloads,workloads,"Pods, ReplicaSets, and Deployments",Create and manage core workload objects for stateless applications.,"Stateless applications များအတွက် အခြေခံ workload objects (Pods, ReplicaSets, Deployments) ကို ဖန်တီးစီမံရန်။","Pods are the smallest deployable units. ReplicaSets maintain replica counts; Deployments manage ReplicaSets and provide declarative updates, rollouts, and rollbacks.",Pod သည် container တစ်ခု သို့မဟုတ် အများအပြားပါဝင်နိုင်သော အခြေခံ deploy unit ဖြစ်သည်။ ReplicaSet သည် Pod replicas အရေအတွက်ကို ထိန်းသိမ်းပြီး Deployment သည် ReplicaSets များကို စီမံကာ rolling update/rollback များကို လွယ်ကူစေသည်။ Stateless workloads အတွက် Deployment ကို အများဆုံး အသုံးပြုသည်။,"[""Pod"",""ReplicaSet"",""Deployment"",""Labels/Selectors"",""Rolling update"",""Rollback""]","[""kubectl run nginx --image=nginx --restart=Never"",""kubectl create deployment web --image=nginx"",""kubectl scale deployment web --replicas=3"",""kubectl rollout status deployment/web"",""kubectl rollout history deployment/web"",""kubectl rollout undo deployment/web""]","apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27
+        ports:
+        - containerPort: 80","[""Create a Deployment, scale it, update image, and rollback."",""Inspect ReplicaSets created by a Deployment.""]","[""lab-deployments""]","[""Perform declarative app updates and rollbacks."",""Troubleshoot rollout failures.""]",3,Beginner,true,
+t-workload-types,workloads,"DaemonSets, StatefulSets, Jobs, and CronJobs","Use specialized workload controllers for node-local, stateful, and batch workloads.","Node-local, stateful နှင့် batch workloads များအတွက် သီးခြား workload controllers များကို အသုံးပြုရန်။","Different controllers fit different workload patterns: DaemonSets run a Pod per node, StatefulSets manage stable identity/storage, Jobs run to completion, and CronJobs run on schedules.",DaemonSet သည် node တိုင်း (သို့မဟုတ် သတ်မှတ်ထားသော nodes) တွင် Pod တစ်ခု run စေသည်။ StatefulSet သည် stable network identity နှင့် persistent storage လိုအပ်သော workloads များအတွက် သင့်လျော်သည်။ Job သည် အလုပ်ပြီးဆုံးသည်အထိ run ပြီး CronJob သည် အချိန်ဇယားအလိုက် Jobs များ ဖန်တီးသည်။,"[""DaemonSet"",""StatefulSet"",""Headless Service"",""Job"",""CronJob"",""Completions/Parallelism"",""Schedule""]","[""kubectl create job pi --image=perl -- perl -Mbignum=bpi -wle 'print bpi(2000)'"",""kubectl create cronjob hello --image=busybox --schedule='*/5 * * * *' -- /bin/sh -c 'date'"",""kubectl get ds,sts,jobs,cronjobs -A""]","apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: ""*/5 * * * *""
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: hello
+            image: busybox:1.36
+            command: [""sh"", ""-c"", ""date; echo Hello""]","[""Create a CronJob and verify created Jobs/Pods."",""Explain when to use StatefulSet vs Deployment.""]","[""lab-workload-types""]","[""Select correct workload type for a scenario."",""Configure and inspect batch workloads.""]",3,Intermediate,true,
+t-config-secrets-probes,workloads,"ConfigMaps, Secrets, Probes, and Resource Management","Configure applications with ConfigMaps/Secrets, health probes, and resource requests/limits.","ConfigMaps/Secrets, health probes နှင့် resource requests/limits များဖြင့် applications ကို ပြင်ဆင်သတ်မှတ်ရန်။","ConfigMaps and Secrets externalize configuration. Probes (liveness/readiness/startup) improve reliability, while requests/limits control scheduling and resource usage.",ConfigMap သည် non-sensitive configuration data ကို ထိန်းသိမ်းရန်ဖြစ်ပြီး Secret သည် sensitive data အတွက် အသုံးပြုသည် (base64 encoded; encryption/RBAC အရ ထိန်းသိမ်းရမည်)။ Liveness/Readiness/Startup probes များက container health ကို စစ်ဆေးပေးသည်။ Requests သည် scheduling အတွက် အသုံးပြုပြီး limits သည် runtime resource usage ကို ကန့်သတ်သည်။,"[""ConfigMap"",""Secret"",""env/envFrom"",""Volume mounts"",""Liveness probe"",""Readiness probe"",""Startup probe"",""Requests"",""Limits""]","[""kubectl create configmap app-config --from-literal=LOG_LEVEL=info"",""kubectl create secret generic db-secret --from-literal=password=example"",""kubectl describe pod <pod>"",""kubectl top pod"",""kubectl top node""]","apiVersion: v1
+kind: Pod
+metadata:
+  name: app
+spec:
+  containers:
+  - name: app
+    image: nginx:1.27
+    envFrom:
+    - configMapRef:
+        name: app-config
+    resources:
+      requests:
+        cpu: ""100m""
+        memory: ""128Mi""
+      limits:
+        cpu: ""250m""
+        memory: ""256Mi""
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 10","[""Inject config via env and volume mount."",""Add resource requests/limits and a readiness probe to a Pod spec.""]","[""lab-config-probes""]","[""Configure apps without rebuilding images."",""Use probes and resources to improve workload reliability.""]",3,Intermediate,true,
+t-scheduling,workloads,"Scheduling: Affinity, Taints/Tolerations, PriorityClass",Control Pod placement and admission-related scheduling behavior.,"Pod placement နှင့် scheduling behavior များကို affinity, taints/tolerations, PriorityClass တို့ဖြင့် ထိန်းချုပ်ရန်။","The scheduler places Pods on suitable nodes based on resource requests, constraints, affinity rules, taints/tolerations, and priorities. These mechanisms help meet availability and placement requirements.","Scheduler သည် node resources, selectors/affinity rules, taints/tolerations နှင့် PriorityClass အစရှိသော အချက်များအပေါ် မူတည်၍ Pods များကို nodes များပေါ်သို့ ချထားသည်။ nodeAffinity/podAffinity သည် placement preference/requirement ကို သတ်မှတ်ပြီး taint လုပ်ထားသော node များသို့ သက်ဆိုင်ရာ toleration ရှိသော Pods များသာ သွားနိုင်သည်။","[""nodeSelector"",""Node affinity"",""Pod affinity/anti-affinity"",""Taints"",""Tolerations"",""PriorityClass"",""Preemption basics""]","[""kubectl label node <node> disktype=ssd"",""kubectl taint nodes <node> key=value:NoSchedule"",""kubectl describe node <node>"",""kubectl get priorityclass""]","apiVersion: v1
+kind: Pod
+metadata:
+  name: scheduled-pod
+spec:
+  tolerations:
+  - key: ""key""
+    operator: ""Equal""
+    value: ""value""
+    effect: ""NoSchedule""
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: disktype
+            operator: In
+            values: [""ssd""]
+  containers:
+  - name: nginx
+    image: nginx:1.27","[""Taint a node and schedule a Pod with matching toleration."",""Use node affinity to constrain Pod placement.""]","[""lab-scheduling""]","[""Influence Pod placement using scheduler primitives."",""Diagnose Pending Pods due to scheduling constraints.""]",3,Advanced,true,
+t-autoscaling-selfhealing,workloads,Autoscaling and Self-Healing Primitives,Configure workload autoscaling and understand primitives that enable resilient deployments.,Workload autoscaling ကို ပြင်ဆင်ခြင်းနှင့် resilient/self-healing deployments အတွက် အခြေခံ primitives များကို နားလည်ရန်။,"Kubernetes supports self-healing through controllers that reconcile desired state. Horizontal Pod Autoscaler (HPA) adjusts replicas based on metrics, complementing robust deployment patterns.",Kubernetes ၏ controller-based architecture သည် failed/restarted containers နှင့် desired replica count များကို အလိုအလျောက် ပြန်လည်ထိန်းသိမ်းပေးသည် (self-healing)။ HPA သည် CPU/memory သို့မဟုတ် custom metrics အပေါ်မူတည်၍ replicas အရေအတွက်ကို ချိန်ညှိနိုင်သည် (metrics-server/metrics pipeline လိုအပ်နိုင်သည်)။,"[""Self-healing"",""Controller reconciliation"",""HPA"",""Metrics Server"",""Replica scaling"",""Deployment strategies""]","[""kubectl autoscale deployment web --cpu-percent=50 --min=1 --max=5"",""kubectl get hpa"",""kubectl describe hpa <name>"",""kubectl top pods""]","apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50","[""Create an HPA for a Deployment and inspect its status."",""Simulate Pod failure and observe controller recovery.""]","[""lab-autoscaling""]","[""Explain and configure basic autoscaling."",""Describe self-healing behaviors in Kubernetes workloads.""]",2,Intermediate,true,
+t-services,networking,"Services, Endpoints, and EndpointSlices",Expose applications using Service types and understand endpoint tracking.,Service types များဖြင့် applications ကို expose လုပ်ခြင်းနှင့် endpoints/endpointslices များကို နားလည်ရန်။,"Services provide stable virtual IPs/DNS names for Pods. ClusterIP is internal, NodePort exposes on node ports, and LoadBalancer provisions external access (when supported). Endpoints/EndpointSlices track backing Pod IPs.","Service သည် label selector ဖြင့် ရွေးချယ်ထားသော Pods များအတွက် stable network endpoint (VIP/DNS) ကို ပေးသည်။ ClusterIP (internal), NodePort (node IP:port), LoadBalancer (external LB integration) ဟူ၍ အမျိုးအစားများရှိသည်။ Endpoints/EndpointSlice objects များသည် Service နောက်ကွယ်ရှိ Pod IPs များကို မှတ်တမ်းတင်ထားသည်။","[""ClusterIP"",""NodePort"",""LoadBalancer"",""Headless Service"",""Endpoints"",""EndpointSlice"",""Selectors""]","[""kubectl expose deployment web --port=80 --target-port=80 --type=ClusterIP"",""kubectl get svc,endpoints,endpointslices"",""kubectl describe svc <name>"",""kubectl get pods -o wide --show-labels""]","apiVersion: v1
+kind: Service
+metadata:
+  name: web-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: web
+  ports:
+  - port: 80
+    targetPort: 80","[""Create ClusterIP and NodePort services for a Deployment."",""Troubleshoot a Service with empty endpoints.""]","[""lab-services""]","[""Choose appropriate Service type."",""Diagnose selector/port mismatches.""]",3,Beginner,true,
+t-networkpolicy,networking,Pod Connectivity and NetworkPolicy,Understand Pod-to-Pod connectivity and enforce traffic rules with NetworkPolicies.,Pod-to-Pod connectivity ကို နားလည်ပြီး NetworkPolicy များဖြင့် traffic rules များကို တင်းကျပ်စွာ သတ်မှတ်ရန်။,Kubernetes networking assumes Pods can communicate unless restricted. NetworkPolicies define allowed ingress/egress traffic for selected Pods; enforcement depends on a CNI/network plugin that supports policies.,"Kubernetes တွင် Pods များအချင်းချင်း ဆက်သွယ်နိုင်မှုကို network model က ပံ့ပိုးပေးသော်လည်း NetworkPolicy များဖြင့် ingress/egress traffic ကို ကန့်သတ်နိုင်သည်။ Policy effects များကို အမှန်တကယ် အကောင်အထည်ဖော်ရန် NetworkPolicy ကို support လုပ်သော CNI plugin လိုအပ်သည်။ Selector, namespaceSelector, ports, policyTypes တို့ကို မှန်ကန်စွာ ရေးသားရမည်။","[""Pod networking model"",""NetworkPolicy"",""Ingress/Egress rules"",""podSelector"",""namespaceSelector"",""CNI enforcement""]","[""kubectl get networkpolicy -A"",""kubectl describe networkpolicy <name> -n <ns>"",""kubectl get pods -o wide -n <ns>""]","apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web
+  namespace: app
+spec:
+  podSelector:
+    matchLabels:
+      app: api
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: web
+    ports:
+    - protocol: TCP
+      port: 80","[""Create a default-deny ingress policy and allow specific traffic."",""Test connectivity impact after applying policies.""]","[""lab-networkpolicy""]","[""Write and reason about NetworkPolicies."",""Understand dependency on CNI capabilities.""]",3,Advanced,true,
+t-ingress-gateway,networking,"Ingress, Ingress Controllers, and Gateway API",Manage HTTP(S) routing into the cluster using Ingress resources/controllers and Gateway API.,Ingress resources/controllers နှင့် Gateway API များကို အသုံးပြုပြီး cluster အတွင်းသို့ HTTP(S) traffic routing ကို စီမံရန်။,"Ingress exposes HTTP/HTTPS routes using controller-specific implementations. Gateway API is a newer, expressive API for traffic management; understanding both resource usage and controller behavior is important.","Ingress resource သည် HTTP/HTTPS routing rules များကို သတ်မှတ်သော်လည်း အလုပ်လုပ်ရန် Ingress Controller လိုအပ်သည်။ Gateway API (GatewayClass, Gateway, HTTPRoute စသည်) သည် ပိုမိုပြည့်စုံပြီး extensible ဖြစ်သော traffic management API ဖြစ်ကာ CKA curriculum တွင်လည်း ပါဝင်လာသည်။ Controller implementation များအလိုက် behavior ကွာခြားနိုင်ကြောင်း သတိထားရမည်။","[""Ingress"",""Ingress Controller"",""IngressClass"",""Gateway API"",""GatewayClass"",""Gateway"",""HTTPRoute"",""Path/host routing""]","[""kubectl get ingress,ingressclass -A"",""kubectl describe ingress <name> -n <ns>"",""kubectl get gatewayclass,gateway,httproute -A"",""kubectl describe httproute <name> -n <ns>""]","apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: web.example.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-svc
+            port:
+              number: 80","[""Create an Ingress rule for a Service."",""Inspect Gateway API resources and understand route attachment.""]","[""lab-ingress-gateway""]","[""Configure basic north-south HTTP routing."",""Distinguish Ingress vs Gateway API roles.""]",3,Intermediate,true,
+t-dns-coredns,networking,CoreDNS and DNS Troubleshooting,Understand cluster DNS and troubleshoot name resolution issues.,Cluster DNS ကို နားလည်ပြီး name resolution ပြဿနာများကို troubleshoot လုပ်ရန်။,"CoreDNS provides DNS-based service discovery in Kubernetes. Troubleshooting involves checking CoreDNS pods, ConfigMap, Service/endpoints, and client-side resolution from Pods.","CoreDNS သည် Kubernetes cluster အတွင်း service discovery အတွက် DNS ကို ပံ့ပိုးပေးသည် (ဥပမာ `svc.cluster.local`)။ DNS ပြဿနာများကို ဖြေရှင်းရာတွင် CoreDNS Deployment/Pods, `kube-dns` Service, CoreDNS ConfigMap (Corefile), upstream connectivity နှင့် Pod အတွင်းမှ `nslookup`/`dig` စစ်ဆေးမှုများကို အသုံးပြုရသည်။","[""CoreDNS"",""Service discovery"",""kube-dns Service"",""Corefile"",""DNS resolution"",""ndots/search paths""]","[""kubectl get pods -n kube-system -l k8s-app=kube-dns"",""kubectl get svc -n kube-system kube-dns"",""kubectl logs -n kube-system -l k8s-app=kube-dns"",""kubectl run dns-test --image=busybox:1.36 -it --rm --restart=Never -- nslookup kubernetes.default""]","# CoreDNS is usually deployed by cluster tooling; ConfigMap holds Corefile
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns
+  namespace: kube-system
+data:
+  Corefile: |
+    .:53 {
+        errors
+        health
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+           pods insecure
+           fallthrough in-addr.arpa ip6.arpa
+        }
+        forward . /etc/resolv.conf
+        cache 30
+        loop
+        reload
+        loadbalance
+    }","[""Verify CoreDNS health and service endpoints."",""Debug DNS resolution from within a Pod.""]","[""lab-coredns""]","[""Diagnose common cluster DNS failures."",""Interpret CoreDNS-related Kubernetes resources.""]",2,Intermediate,true,
+t-cni-service-networking,networking,CNI and Service Networking Concepts,Understand CNI plugin role and service networking fundamentals.,CNI plugin ၏ အခန်းကဏ္ဍနှင့် service networking အခြေခံများကို နားလည်ရန်။,CNI plugins implement Pod networking. Service networking provides stable access to Pods via virtual IPs and load balancing. Admins must understand how these layers interact for troubleshooting.,CNI (Container Network Interface) plugin များသည် Pod IP assignment နှင့် Pod network connectivity ကို တာဝန်ယူသည်။ Service networking layer သည် kube-proxy သို့မဟုတ် eBPF dataplane များမှတစ်ဆင့် virtual IP/DNS အမည်များဖြင့် traffic ကို backend Pods များထံ ဖြန့်ဝေပေးသည်။ NetworkPolicy enforcement သည်လည်း CNI အပေါ် မူတည်နိုင်သည်။,"[""CNI"",""Pod CIDR"",""Service CIDR"",""kube-proxy modes"",""Service dataplane"",""Network plugin responsibilities""]","[""kubectl get pods -n kube-system -o wide"",""kubectl get nodes -o jsonpath='{.items[*].spec.podCIDR}'"",""kubectl get svc -A""]","# CNI is installed as cluster components/manifests or charts (implementation-specific)
+# Example check: kubectl get pods -n kube-system | grep -E 'calico|cilium|flannel|weave'","[""Identify the CNI/plugin components installed in a cluster."",""Map a Service to its backing Pods and node-level dataplane components.""]","[""lab-cni-networking""]","[""Explain CNI vs Service networking responsibilities."",""Use cluster inspection commands during network troubleshooting.""]",2,Intermediate,true,
+t-storage-core,storage,"Volumes, PersistentVolumes, and PersistentVolumeClaims",Manage persistent storage using PVs and PVCs.,PVs နှင့် PVCs များကို အသုံးပြုပြီး persistent storage ကို စီမံရန်။,"Volumes provide storage to Pods. PersistentVolumes (PV) are cluster storage resources, and PersistentVolumeClaims (PVC) are user requests that bind to suitable PVs based on size, access modes, and class.","Volume သည် Pod lifecycle နှင့် ဆက်စပ်သော storage ကို ပေးသော်လည်း PV/PVC pattern သည် storage ကို Pod မှ ခွဲထုတ်စီမံနိုင်စေသည်။ PersistentVolume (PV) သည် cluster-level resource ဖြစ်ပြီး PersistentVolumeClaim (PVC) သည် application/user ဘက်မှ storage request ဖြစ်သည်။ Binding သည် capacity, accessModes, storageClassName စသည်တို့အပေါ် မူတည်သည်။","[""Volume"",""PersistentVolume"",""PersistentVolumeClaim"",""Binding"",""Volume mount"",""Stateful workloads""]","[""kubectl get pv,pvc -A"",""kubectl describe pv <name>"",""kubectl describe pvc <name> -n <ns>"",""kubectl get pods -n <ns> -o wide""]","apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-pvc
+spec:
+  accessModes: [""ReadWriteOnce""]
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-pvc
+spec:
+  containers:
+  - name: app
+    image: nginx:1.27
+    volumeMounts:
+    - name: data
+      mountPath: /usr/share/nginx/html
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: app-pvc","[""Create/bind a PVC and mount it into a Pod."",""Troubleshoot a Pending PVC.""]","[""lab-storage-core""]","[""Configure Pods to consume persistent storage."",""Diagnose common PV/PVC binding issues.""]",3,Intermediate,true,
+t-storageclass-provisioning,storage,"StorageClass, Dynamic Provisioning, Access Modes, Reclaim Policies",Use StorageClasses and understand provisioning behavior and storage policies.,"StorageClasses, dynamic provisioning နှင့် storage policies (access modes, reclaim policies) များကို နားလည်အသုံးပြုရန်။",StorageClasses enable dynamic provisioning of PVs through provisioners (often CSI drivers). Access modes and reclaim policies define how volumes are mounted and what happens after claim release.,StorageClass သည် dynamic provisioning အတွက် template/parameters များကို သတ်မှတ်ပေးပြီး provisioner (များသောအားဖြင့် CSI driver) က PVC request အပေါ်မူတည်၍ PV ကို အလိုအလျောက် ဖန်တီးပေးနိုင်သည်။ Access modes (RWO/ROX/RWX etc.) သည် mount ပုံစံကို ဆုံးဖြတ်ပြီး reclaimPolicy (Retain/Delete/Recycle legacy) သည် claim ပြန်လွှတ်ပြီးနောက် volume ကို မည်သို့ ကိုင်တွယ်မည်ကို ဆုံးဖြတ်သည်။,"[""StorageClass"",""Dynamic provisioning"",""Provisioner"",""Access modes"",""Reclaim policy"",""VolumeBindingMode""]","[""kubectl get storageclass"",""kubectl describe storageclass <name>"",""kubectl get pv -o wide"",""kubectl patch pv <pv-name> -p '{\""spec\"":{\""persistentVolumeReclaimPolicy\"":\""Retain\""}}'""]","apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain","[""Identify default StorageClass and explain its effect."",""Create a PVC that uses dynamic provisioning (cluster support permitting).""]","[""lab-storageclass""]","[""Explain dynamic provisioning flow."",""Choose correct access mode/reclaim policy for a use case.""]",2,Intermediate,true,
+t-csi-mounts-troubleshooting,storage,"CSI, Volume Mounts, and Storage Troubleshooting",Understand CSI-based storage integration and troubleshoot common storage mount issues.,CSI-based storage integration နှင့် volume mount/storage troubleshooting အခြေခံများကို နားလည်ရန်။,"CSI standardizes storage integration in Kubernetes. Storage troubleshooting often involves checking PVC/PV status, events, node mount errors, Pod events, and StorageClass/provisioner behavior.","CSI (Container Storage Interface) သည် storage vendors/drivers များကို Kubernetes နှင့် ပေါင်းစပ်အသုံးပြုရန် စံသတ်မှတ်ပေးသည်။ Storage ပြဿနာများကို ဖြေရှင်းရာတွင် PVC/PV phase, events, Pod describe output, mount permission/path ပြဿနာများ, node/plugin logs နှင့် provisioner အခြေအနေများကို စစ်ဆေးရသည်။","[""CSI"",""CSI driver"",""Mount propagation basics"",""Volume attachment"",""Storage events"",""Troubleshooting workflow""]","[""kubectl get pods -n kube-system"",""kubectl describe pod <pod>"",""kubectl describe pvc <pvc>"",""kubectl get events --sort-by=.lastTimestamp -n <ns>""]","# Example mount in a Pod spec
+volumeMounts:
+- name: data
+  mountPath: /data
+  readOnly: false","[""Diagnose why a Pod is stuck due to volume mount/PVC issues."",""Inspect events to find storage provisioning failures.""]","[""lab-storage-troubleshooting""]","[""Apply systematic storage troubleshooting."",""Recognize CSI-related components and states.""]",2,Advanced,true,
+t-troubleshoot-cluster-nodes,troubleshooting,Cluster and Node Troubleshooting,Diagnose and fix cluster-level and node-level issues.,Cluster-level နှင့် node-level ပြဿနာများကို ရှာဖွေပြီး ပြင်ဆင်ရန်။,"Node and cluster troubleshooting requires checking node conditions, kubelet status, resource pressure, certificates, and cluster component health. A methodical approach saves time in the exam.","Node NotReady, resource pressure, kubelet failures, certificate issues နှင့် cluster connectivity ပြဿနာများကို ဖြေရှင်းရန် `kubectl get/describe`, node conditions, kubelet service/logs, events နှင့် system health indicators များကို စနစ်တကျ စစ်ဆေးရမည်။ Exam တွင် အချိန်အကန့်အသတ်ရှိသောကြောင့် triage လုပ်နည်း မှန်ကန်ရန် အရေးကြီးသည်။","[""Node conditions"",""NotReady"",""kubelet"",""Resource pressure"",""Taints/cordon/drain"",""Cluster health checks""]","[""kubectl get nodes"",""kubectl describe node <node>"",""kubectl get events -A --sort-by=.lastTimestamp"",""kubectl cordon <node>"",""kubectl drain <node> --ignore-daemonsets --delete-emptydir-data""]","# Troubleshooting is operational; manifests may be edited/fixed during recovery
+# Example: restart behavior is controller-managed, not a direct 'restart' field on Pods","[""Investigate a NotReady node scenario."",""Recover workloads from an unschedulable node.""]","[""lab-troubleshoot-nodes""]","[""Identify root causes of node failures."",""Restore node/workload availability.""]",4,Advanced,true,
+t-troubleshoot-control-plane-apps,troubleshooting,"Control Plane, Application, and Pod Troubleshooting","Troubleshoot control plane components, workloads, and Pod lifecycle failures.","Control plane components, workloads နှင့် Pod lifecycle failures များကို troubleshoot လုပ်ရန်။","Common workload issues include image pull errors, crashes, misconfiguration, probe failures, and scheduling problems. Control plane issues may involve static pods, certificates, or component misconfiguration.","Pod troubleshooting တွင် `Pending`, `CrashLoopBackOff`, `ImagePullBackOff`, `CreateContainerConfigError`, probe failures စသည်တို့၏ အကြောင်းရင်းများကို events/logs/describe output များမှ ခွဲခြားဖော်ထုတ်ရသည်။ Control plane components (kube-apiserver, scheduler, controller-manager, etcd) သည် static pods သို့မဟုတ် system components အဖြစ် run နေတတ်ပြီး manifests/logs/certificates များကို စစ်ဆေးရန် လိုအပ်နိုင်သည်။","[""Pod phases"",""CrashLoopBackOff"",""ImagePullBackOff"",""Events"",""Container logs"",""Static pods"",""Component health""]","[""kubectl get pods -A"",""kubectl describe pod <pod> -n <ns>"",""kubectl logs <pod> -n <ns> --previous"",""kubectl get events -n <ns> --sort-by=.lastTimestamp"",""kubectl get pods -n kube-system""]","apiVersion: v1
+kind: Pod
+metadata:
+  name: debug-busybox
+spec:
+  containers:
+  - name: bb
+    image: busybox:1.36
+    command: [""sh"", ""-c"", ""sleep 3600""]","[""Fix a failing Deployment/Pod based on logs and events."",""Identify a misconfigured control plane static pod manifest (lab environment).""]","[""lab-troubleshoot-apps""]","[""Resolve common Pod/application failures quickly."",""Use systematic debugging for control plane symptoms.""]",4,Advanced,true,
+t-troubleshoot-network-services,troubleshooting,"Services, Networking, and DNS Troubleshooting","Debug service connectivity, network policies, ingress/gateway routing, and DNS issues.","Service connectivity, NetworkPolicy, Ingress/Gateway routing နှင့် DNS ပြဿနာများကို debug လုပ်ရန်။","Networking issues can stem from selectors, ports, endpoints, policies, DNS, or controller misconfiguration. Effective troubleshooting traces traffic path from client to Service to Pod.","Networking troubleshooting တွင် client Pod → DNS → Service → Endpoints/Pods → NetworkPolicy/Ingress/Gateway → node/CNI အဆင့်များအထိ traffic path ကို တဆင့်ချင်း စစ်ဆေးရသည်။ Service selector/ports မကိုက်ခြင်း, endpoints မရှိခြင်း, DNS resolution fail ဖြစ်ခြင်း, policy block လုပ်ခြင်းများသည် အဖြစ်များသော အကြောင်းရင်းများဖြစ်သည်။","[""Service selectors"",""Endpoints"",""NetworkPolicy effects"",""Ingress/Gateway routing"",""DNS debugging"",""Traffic path analysis""]","[""kubectl get svc,endpointslices -n <ns>"",""kubectl describe svc <name> -n <ns>"",""kubectl exec -it <pod> -n <ns> -- nslookup <service>"",""kubectl exec -it <pod> -n <ns> -- wget -qO- http://<service>:<port>"",""kubectl get netpol,ingress,httproute -A""]","# Use ephemeral/debug pods for network tests
+# kubectl run netshoot --rm -it --image=nicolaka/netshoot --restart=Never -- bash","[""Fix a Service that routes to no Pods."",""Diagnose DNS failure for in-cluster service names.""]","[""lab-troubleshoot-network""]","[""Isolate and fix common service/network/DNS issues."",""Validate fixes with in-cluster connectivity tests.""]",4,Advanced,true,
+t-monitoring-logs,troubleshooting,"Logs, Events, and Resource Monitoring","Use logs, events, and resource metrics to evaluate cluster and application health.","Cluster/application health ကို အကဲဖြတ်ရန် logs, events နှင့် resource metrics များကို အသုံးပြုခြင်း။","Observability basics for administrators include reading container logs, inspecting Kubernetes events, and monitoring CPU/memory usage to identify bottlenecks or failures.","Kubernetes troubleshooting တွင် `kubectl logs`, `kubectl describe`, `kubectl get events` နှင့် `kubectl top` (metrics-server ရှိပါက) တို့သည် အခြေခံအရေးကြီး tool များဖြစ်သည်။ Container stdout/stderr streams, restart counts, resource usage နှင့် event timestamps များကို ဆက်စပ်ကြည့်ခြင်းဖြင့် ပြဿနာအရင်းအမြစ်ကို မြန်မြန်ရှာနိုင်သည်။","[""Container logs"",""Previous logs"",""Events"",""kubectl top"",""Metrics Server"",""Resource pressure signals""]","[""kubectl logs <pod> -n <ns>"",""kubectl logs <pod> -n <ns> -c <container> --previous"",""kubectl get events -A --sort-by=.metadata.creationTimestamp"",""kubectl top nodes"",""kubectl top pods -A""]","apiVersion: v1
+kind: Pod
+metadata:
+  name: log-demo
+spec:
+  containers:
+  - name: app
+    image: busybox:1.36
+    command: [""sh"", ""-c"", ""while true; do echo $(date) hello; sleep 5; done""]","[""Collect logs and events to explain an application failure."",""Identify resource hotspots using kubectl top (if available).""]","[""lab-monitoring-logs""]","[""Correlate logs/events/metrics during incident diagnosis."",""Use built-in kubectl observability commands effectively.""]",2,Beginner,true,
+t-supplementary-ecosystem,troubleshooting,Supplementary Knowledge (Beyond Core Exam Tasks),Additional Kubernetes ecosystem topics that help in real-world administration but are not explicitly listed as core CKA exam tasks.,CKA core exam tasks တွင် တိုက်ရိုက်မပါဝင်သော်လည်း အမှန်တကယ် Kubernetes administration အတွက် အထောက်အကူဖြစ်သော နောက်ထပ် ecosystem knowledge များ။,"Real-world clusters often use observability stacks, GitOps, service meshes, security scanners, and advanced networking/storage integrations. These are valuable but should not replace core CKA practice.","Production environments တွင် Prometheus/Grafana, GitOps tools, service mesh, advanced security tooling, backup platforms စသည်တို့ကို အသုံးပြုတတ်ကြသော်လည်း CKA exam ၏ core objectives များကို ဦးစားပေး လေ့ကျင့်ရမည်။ ဤအပိုင်းကို exam-required အဖြစ် မယူဆဘဲ supplementary knowledge အဖြစ်သာ သတ်မှတ်ထားပါသည်။","[""Prometheus/Grafana (supplementary)"",""Service mesh (supplementary)"",""GitOps (supplementary)"",""Policy engines (supplementary)"",""Backup platforms (supplementary)""]","[""# Focus remains on core kubectl and cluster admin tasks for CKA""]",# No specific exam-required manifest for this supplementary topic,"[""Map supplementary tools to CKA core objectives they support."",""Prioritize exam-required labs before advanced ecosystem tools.""]",[],"[""Differentiate exam-required skills from optional ecosystem knowledge."",""Plan study time with correct priority.""]",1,Beginner,false,Not an official CKA exam objective; included for study prioritization and real-world context.

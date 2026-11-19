@@ -1,0 +1,181 @@
+plan_id,plan_name,day,block,domain_focus,theory_hours,lab_hours,revision_hours,weekly_assessment_day,is_mock_day
+30,30-Day Intensive Plan,1,Week 1 - Architecture & Cluster Operations,cluster-arch,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,2,Week 1 - Architecture & Cluster Operations,cluster-arch,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,3,Week 1 - Architecture & Cluster Operations,cluster-arch,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,4,Week 1 - Architecture & Cluster Operations,cluster-arch,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,5,Week 1 - Architecture & Cluster Operations,cluster-arch,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,6,Week 1 - Architecture & Cluster Operations,cluster-arch,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,7,Week 1 - Architecture & Cluster Operations,cluster-arch,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,8,"Week 2 - Workloads, Scheduling & Services",workloads|networking,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,9,"Week 2 - Workloads, Scheduling & Services",workloads|networking,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,10,"Week 2 - Workloads, Scheduling & Services",workloads|networking,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,11,"Week 2 - Workloads, Scheduling & Services",workloads|networking,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,12,"Week 2 - Workloads, Scheduling & Services",workloads|networking,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,13,"Week 2 - Workloads, Scheduling & Services",workloads|networking,1.5,2.5,0.5,7,false
+30,30-Day Intensive Plan,14,"Week 2 - Workloads, Scheduling & Services",workloads|networking,1.5,2.5,0.5,7,true
+30,30-Day Intensive Plan,15,Week 3 - Storage & Troubleshooting,storage|troubleshooting,1,3,0.5,7,false
+30,30-Day Intensive Plan,16,Week 3 - Storage & Troubleshooting,storage|troubleshooting,1,3,0.5,7,false
+30,30-Day Intensive Plan,17,Week 3 - Storage & Troubleshooting,storage|troubleshooting,1,3,0.5,7,false
+30,30-Day Intensive Plan,18,Week 3 - Storage & Troubleshooting,storage|troubleshooting,1,3,0.5,7,false
+30,30-Day Intensive Plan,19,Week 3 - Storage & Troubleshooting,storage|troubleshooting,1,3,0.5,7,false
+30,30-Day Intensive Plan,20,Week 3 - Storage & Troubleshooting,storage|troubleshooting,1,3,0.5,7,false
+30,30-Day Intensive Plan,21,Week 3 - Storage & Troubleshooting,storage|troubleshooting,1,3,0.5,7,false
+30,30-Day Intensive Plan,22,Week 4 - Mixed Scenarios & Mocks,cluster-arch|workloads|networking|storage|troubleshooting,0.5,3,1,7,false
+30,30-Day Intensive Plan,23,Week 4 - Mixed Scenarios & Mocks,cluster-arch|workloads|networking|storage|troubleshooting,0.5,3,1,7,false
+30,30-Day Intensive Plan,24,Week 4 - Mixed Scenarios & Mocks,cluster-arch|workloads|networking|storage|troubleshooting,0.5,3,1,7,true
+30,30-Day Intensive Plan,25,Week 4 - Mixed Scenarios & Mocks,cluster-arch|workloads|networking|storage|troubleshooting,0.5,3,1,7,false
+30,30-Day Intensive Plan,26,Week 4 - Mixed Scenarios & Mocks,cluster-arch|workloads|networking|storage|troubleshooting,0.5,3,1,7,false
+30,30-Day Intensive Plan,27,Week 4 - Mixed Scenarios & Mocks,cluster-arch|workloads|networking|storage|troubleshooting,0.5,3,1,7,false
+30,30-Day Intensive Plan,28,Week 4 - Mixed Scenarios & Mocks,cluster-arch|workloads|networking|storage|troubleshooting,0.5,3,1,7,false
+30,30-Day Intensive Plan,29,Week 4 - Mixed Scenarios & Mocks,cluster-arch|workloads|networking|storage|troubleshooting,0.5,3,1,7,true
+30,30-Day Intensive Plan,30,Week 4 - Mixed Scenarios & Mocks,cluster-arch|workloads|networking|storage|troubleshooting,0.5,3,1,7,false
+60,60-Day Standard Plan,1,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,2,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,3,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,4,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,5,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,6,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,7,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,8,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,9,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,10,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,11,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,12,Days 1-12 - Cluster Architecture,cluster-arch,1,1.5,0.5,7,false
+60,60-Day Standard Plan,13,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,14,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,15,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,16,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,17,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,18,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,19,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,20,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,21,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,22,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,23,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,24,Days 13-24 - Workloads & Scheduling,workloads,1,1.5,0.5,7,false
+60,60-Day Standard Plan,25,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,26,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,27,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,28,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,true
+60,60-Day Standard Plan,29,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,30,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,31,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,32,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,33,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,34,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,35,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,36,Days 25-36 - Services & Networking,networking,1,1.5,0.5,7,false
+60,60-Day Standard Plan,37,Days 37-45 - Storage,storage,0.8,1.5,0.5,7,false
+60,60-Day Standard Plan,38,Days 37-45 - Storage,storage,0.8,1.5,0.5,7,false
+60,60-Day Standard Plan,39,Days 37-45 - Storage,storage,0.8,1.5,0.5,7,false
+60,60-Day Standard Plan,40,Days 37-45 - Storage,storage,0.8,1.5,0.5,7,false
+60,60-Day Standard Plan,41,Days 37-45 - Storage,storage,0.8,1.5,0.5,7,false
+60,60-Day Standard Plan,42,Days 37-45 - Storage,storage,0.8,1.5,0.5,7,false
+60,60-Day Standard Plan,43,Days 37-45 - Storage,storage,0.8,1.5,0.5,7,false
+60,60-Day Standard Plan,44,Days 37-45 - Storage,storage,0.8,1.5,0.5,7,false
+60,60-Day Standard Plan,45,Days 37-45 - Storage,storage,0.8,1.5,0.5,7,true
+60,60-Day Standard Plan,46,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,47,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,48,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,49,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,50,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,51,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,52,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,53,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,54,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,55,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,56,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,true
+60,60-Day Standard Plan,57,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,58,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,59,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+60,60-Day Standard Plan,60,Days 46-60 - Troubleshooting & Full Mocks,troubleshooting|cluster-arch|workloads|networking|storage,0.5,2,0.5,7,false
+90,90-Day Comfortable Plan,1,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,2,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,3,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,4,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,5,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,6,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,7,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,8,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,9,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,10,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,11,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,12,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,13,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,14,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,15,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,16,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,17,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,18,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,19,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,20,Days 1-20 - Cluster Architecture & Installation,cluster-arch,1,1,0.25,7,false
+90,90-Day Comfortable Plan,21,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,22,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,23,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,24,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,25,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,26,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,27,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,28,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,29,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,30,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,31,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,32,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,33,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,34,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,false
+90,90-Day Comfortable Plan,35,Days 21-35 - Workloads & Scheduling,workloads,1,1,0.25,7,true
+90,90-Day Comfortable Plan,36,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,37,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,38,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,39,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,40,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,41,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,42,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,43,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,44,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,45,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,46,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,47,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,48,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,49,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,50,Days 36-50 - Services & Networking,networking,1,1,0.25,7,false
+90,90-Day Comfortable Plan,51,Days 51-60 - Storage,storage,0.75,1,0.25,7,false
+90,90-Day Comfortable Plan,52,Days 51-60 - Storage,storage,0.75,1,0.25,7,false
+90,90-Day Comfortable Plan,53,Days 51-60 - Storage,storage,0.75,1,0.25,7,false
+90,90-Day Comfortable Plan,54,Days 51-60 - Storage,storage,0.75,1,0.25,7,false
+90,90-Day Comfortable Plan,55,Days 51-60 - Storage,storage,0.75,1,0.25,7,false
+90,90-Day Comfortable Plan,56,Days 51-60 - Storage,storage,0.75,1,0.25,7,false
+90,90-Day Comfortable Plan,57,Days 51-60 - Storage,storage,0.75,1,0.25,7,false
+90,90-Day Comfortable Plan,58,Days 51-60 - Storage,storage,0.75,1,0.25,7,false
+90,90-Day Comfortable Plan,59,Days 51-60 - Storage,storage,0.75,1,0.25,7,false
+90,90-Day Comfortable Plan,60,Days 51-60 - Storage,storage,0.75,1,0.25,7,false
+90,90-Day Comfortable Plan,61,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,62,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,63,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,true
+90,90-Day Comfortable Plan,64,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,65,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,66,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,67,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,68,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,69,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,70,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,71,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,72,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,73,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,74,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,75,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,76,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,77,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,78,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,79,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,80,Days 61-80 - Troubleshooting Deep Dive,troubleshooting,0.5,1.5,0.25,7,false
+90,90-Day Comfortable Plan,81,Days 81-90 - Revision & Mock Exams,cluster-arch|workloads|networking|storage|troubleshooting,0.25,1.5,0.75,7,false
+90,90-Day Comfortable Plan,82,Days 81-90 - Revision & Mock Exams,cluster-arch|workloads|networking|storage|troubleshooting,0.25,1.5,0.75,7,false
+90,90-Day Comfortable Plan,83,Days 81-90 - Revision & Mock Exams,cluster-arch|workloads|networking|storage|troubleshooting,0.25,1.5,0.75,7,false
+90,90-Day Comfortable Plan,84,Days 81-90 - Revision & Mock Exams,cluster-arch|workloads|networking|storage|troubleshooting,0.25,1.5,0.75,7,true
+90,90-Day Comfortable Plan,85,Days 81-90 - Revision & Mock Exams,cluster-arch|workloads|networking|storage|troubleshooting,0.25,1.5,0.75,7,false
+90,90-Day Comfortable Plan,86,Days 81-90 - Revision & Mock Exams,cluster-arch|workloads|networking|storage|troubleshooting,0.25,1.5,0.75,7,false
+90,90-Day Comfortable Plan,87,Days 81-90 - Revision & Mock Exams,cluster-arch|workloads|networking|storage|troubleshooting,0.25,1.5,0.75,7,false
+90,90-Day Comfortable Plan,88,Days 81-90 - Revision & Mock Exams,cluster-arch|workloads|networking|storage|troubleshooting,0.25,1.5,0.75,7,false
+90,90-Day Comfortable Plan,89,Days 81-90 - Revision & Mock Exams,cluster-arch|workloads|networking|storage|troubleshooting,0.25,1.5,0.75,7,true
+90,90-Day Comfortable Plan,90,Days 81-90 - Revision & Mock Exams,cluster-arch|workloads|networking|storage|troubleshooting,0.25,1.5,0.75,7,false

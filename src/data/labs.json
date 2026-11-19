@@ -1,0 +1,560 @@
+[
+  {
+    "id": "lab-arch-overview",
+    "topicId": "t-arch-overview",
+    "title": "Cluster Topology Inspection",
+    "objective": "Inspect cluster nodes and core components to understand architecture.",
+    "objectiveMm": "Cluster architecture ကို နားလည်ရန် nodes နှင့် core components များကို စစ်ဆေးလေ့လာခြင်း။",
+    "prerequisites": ["Access to a running Kubernetes cluster", "kubectl configured"],
+    "environmentSetup": "Use kind/minikube or a kubeadm lab cluster with at least 1 control-plane and 1 worker node.",
+    "steps": [
+      "Run `kubectl cluster-info` and note control plane endpoint.",
+      "Run `kubectl get nodes -o wide` and identify roles, versions, internal IPs.",
+      "Run `kubectl get pods -n kube-system -o wide` and list control plane/system components."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl cluster-info", "kubectl get nodes -o wide", "kubectl get pods -n kube-system -o wide"],
+    "expectedOutput": "Node list shows Ready nodes and kube-system shows core components such as kube-apiserver, etcd, kube-scheduler, kube-controller-manager, coredns, kube-proxy/CNI pods (varies by setup).",
+    "troubleshooting": ["If kubectl cannot connect, verify kubeconfig context and API server endpoint.", "If nodes are NotReady, describe nodes and inspect conditions/events."],
+    "verificationChecklist": ["I can identify control plane vs worker nodes.", "I can name key control plane components running in the cluster."]
+  },
+  {
+    "id": "lab-control-plane",
+    "topicId": "t-control-plane-components",
+    "title": "Control Plane Component Inspection",
+    "objective": "Locate and inspect control plane component manifests and logs.",
+    "objectiveMm": "Control plane component manifests/logs များကို ရှာဖွေစစ်ဆေးခြင်း။",
+    "prerequisites": ["kubeadm-based lab cluster recommended", "Node shell access (for static manifests/logs)"],
+    "environmentSetup": "Use a control-plane node where static pod manifests are under /etc/kubernetes/manifests.",
+    "steps": [
+      "List files in `/etc/kubernetes/manifests` and identify component manifests.",
+      "Describe kube-apiserver/scheduler/controller-manager pods in kube-system.",
+      "Review recent logs for one control plane component and note key flags/config references."
+    ],
+    "yamlManifests": [],
+    "commands": ["ls /etc/kubernetes/manifests", "kubectl get pods -n kube-system", "kubectl describe pod kube-apiserver-<node> -n kube-system", "kubectl logs kube-scheduler-<node> -n kube-system --tail=50"],
+    "expectedOutput": "Static pod manifests and corresponding pods are visible; logs show component startup/runtime messages.",
+    "troubleshooting": ["Component pod name includes node name in kubeadm clusters.", "If logs unavailable, check container runtime logs on the node."],
+    "verificationChecklist": ["I can locate static pod manifests.", "I can inspect status/logs of control plane components."]
+  },
+  {
+    "id": "lab-node-components",
+    "topicId": "t-worker-components",
+    "title": "Worker Node and kubelet Health Check",
+    "objective": "Inspect node conditions and kubelet health.",
+    "objectiveMm": "Node conditions နှင့် kubelet health ကို စစ်ဆေးခြင်း။",
+    "prerequisites": ["Cluster access", "SSH/node access for kubelet checks (optional but recommended)"],
+    "environmentSetup": "A cluster with at least one worker node.",
+    "steps": [
+      "Run `kubectl describe node <worker>` and review Conditions, Capacity, Allocatable, and taints.",
+      "Check kubelet service status/logs on the node if accessible.",
+      "Correlate node conditions with cluster events."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl get nodes", "kubectl describe node <worker>", "systemctl status kubelet", "journalctl -u kubelet --no-pager -n 100", "kubectl get events -A --sort-by=.lastTimestamp"],
+    "expectedOutput": "Node shows Ready condition when healthy; kubelet logs/status provide runtime details.",
+    "troubleshooting": ["NotReady may indicate kubelet, runtime, or network issues.", "Check certificate expiration and config file paths if kubelet fails to start."],
+    "verificationChecklist": ["I can interpret node conditions.", "I know where to inspect kubelet status/logs."]
+  },
+  {
+    "id": "lab-kubeadm",
+    "topicId": "t-kubeadm",
+    "title": "kubeadm Workflow and Node Maintenance",
+    "objective": "Practice kubeadm lifecycle concepts and safe node maintenance operations.",
+    "objectiveMm": "kubeadm lifecycle concepts နှင့် node maintenance လုပ်ငန်းစဉ်များကို လေ့ကျင့်ခြင်း။",
+    "prerequisites": ["Test cluster", "kubectl admin access"],
+    "environmentSetup": "Use a disposable cluster (kind/kubeadm lab) where node drain/uncordon is safe.",
+    "steps": [
+      "Review `kubeadm token create --print-join-command` output (or documented example).",
+      "Cordon and drain a worker node while preserving workload availability.",
+      "Uncordon the node and verify scheduling resumes.",
+      "Review `kubeadm upgrade plan` output in an upgrade-capable environment (or study output format)."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubeadm token create --print-join-command", "kubectl cordon <node>", "kubectl drain <node> --ignore-daemonsets --delete-emptydir-data", "kubectl uncordon <node>", "kubeadm upgrade plan"],
+    "expectedOutput": "Node becomes SchedulingDisabled after cordon; pods evicted/rescheduled during drain (where possible); node schedulable after uncordon.",
+    "troubleshooting": ["Drain may fail due to PodDisruptionBudgets or standalone pods; use flags carefully in labs.", "DaemonSets require --ignore-daemonsets."],
+    "verificationChecklist": ["I can safely drain and uncordon a node.", "I understand join/upgrade command purposes."]
+  },
+  {
+    "id": "lab-ha",
+    "topicId": "t-ha-control-plane",
+    "title": "HA Control Plane Concepts Verification",
+    "objective": "Identify HA control plane components and failure considerations.",
+    "objectiveMm": "HA control plane components နှင့် failure considerations များကို ဖော်ထုတ်နားလည်ခြင်း။",
+    "prerequisites": ["Conceptual study; HA lab cluster optional"],
+    "environmentSetup": "If available, use a multi-control-plane cluster; otherwise analyze architecture/docs.",
+    "steps": [
+      "List nodes and identify multiple control-plane nodes if present.",
+      "Inspect kube-system lease/endpoints objects related to leader election.",
+      "Document how API server load balancing and etcd quorum affect availability."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl get nodes -o wide", "kubectl get leases -n kube-system", "kubectl get pods -n kube-system -o wide"],
+    "expectedOutput": "Understanding of HA topology, leader election resources, and quorum requirements.",
+    "troubleshooting": ["Single-node labs cannot fully demonstrate HA failover; use documentation to supplement."],
+    "verificationChecklist": ["I can explain API load balancer and etcd quorum roles.", "I can identify leader election indicators in kube-system."]
+  },
+  {
+    "id": "lab-rbac",
+    "topicId": "t-rbac",
+    "title": "RBAC Role and Binding Practice",
+    "objective": "Create and verify namespace-scoped RBAC permissions.",
+    "objectiveMm": "Namespace-scoped RBAC permissions များကို ဖန်တီးပြီး စစ်ဆေးခြင်း။",
+    "prerequisites": ["kubectl admin access", "Namespace for testing"],
+    "environmentSetup": "Any Kubernetes cluster; create a temporary namespace `rbac-lab`.",
+    "steps": [
+      "Create namespace and a ServiceAccount.",
+      "Create a Role allowing get/list/watch on pods.",
+      "Bind the Role to the ServiceAccount with a RoleBinding.",
+      "Verify allowed/denied actions using `kubectl auth can-i`."
+    ],
+    "yamlManifests": [
+      {
+        "name": "rbac-lab.yaml",
+        "content": "apiVersion: v1\nkind: Namespace\nmetadata:\n  name: rbac-lab\n---\napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: pod-reader-sa\n  namespace: rbac-lab\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: Role\nmetadata:\n  name: pod-reader\n  namespace: rbac-lab\nrules:\n- apiGroups: [\"\"]\n  resources: [\"pods\"]\n  verbs: [\"get\", \"list\", \"watch\"]\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: RoleBinding\nmetadata:\n  name: read-pods-binding\n  namespace: rbac-lab\nsubjects:\n- kind: ServiceAccount\n  name: pod-reader-sa\n  namespace: rbac-lab\nroleRef:\n  kind: Role\n  name: pod-reader\n  apiGroup: rbac.authorization.k8s.io\n"
+      }
+    ],
+    "commands": ["kubectl apply -f rbac-lab.yaml", "kubectl auth can-i list pods --as=system:serviceaccount:rbac-lab:pod-reader-sa -n rbac-lab", "kubectl auth can-i delete pods --as=system:serviceaccount:rbac-lab:pod-reader-sa -n rbac-lab"],
+    "expectedOutput": "ServiceAccount can list/get/watch pods in rbac-lab but cannot delete pods.",
+    "troubleshooting": ["Ensure namespace matches in Role, RoleBinding, and can-i checks.", "Use correct subject kind/name for users vs service accounts."],
+    "verificationChecklist": ["Role and RoleBinding created successfully.", "Allowed and denied permissions verified."]
+  },
+  {
+    "id": "lab-etcd",
+    "topicId": "t-etcd-backup-restore",
+    "title": "etcd Snapshot Backup and Status Check",
+    "objective": "Take an etcd snapshot and inspect it (restore steps reviewed in lab notes).",
+    "objectiveMm": "etcd snapshot backup ယူခြင်းနှင့် စစ်ဆေးခြင်း (restore အဆင့်များကိုလည်း လေ့လာခြင်း)။",
+    "prerequisites": ["Access to etcd endpoint/certs (kubeadm control plane)", "etcdctl installed"],
+    "environmentSetup": "Run on a control-plane node or environment with etcd client certs.",
+    "steps": [
+      "Set ETCDCTL_API=3 and identify endpoint/cert paths.",
+      "Run snapshot save to a file in /tmp.",
+      "Run snapshot status to verify snapshot integrity metadata.",
+      "Review restore command and required manifest/data-dir updates (perform only in disposable lab)."
+    ],
+    "yamlManifests": [],
+    "commands": ["sudo ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key snapshot save /tmp/etcd-snapshot.db", "sudo ETCDCTL_API=3 etcdctl snapshot status /tmp/etcd-snapshot.db --write-out=table"],
+    "expectedOutput": "Snapshot file created and status table displayed.",
+    "troubleshooting": ["Wrong cert/key/endpoint causes connection/auth errors.", "Restore in production-like clusters requires careful static pod and data-dir handling."],
+    "verificationChecklist": ["Snapshot save command succeeds.", "I can explain restore prerequisites and risks."]
+  },
+  {
+    "id": "lab-helm-kustomize",
+    "topicId": "t-helm-kustomize",
+    "title": "Helm Release and Kustomize Overlay Basics",
+    "objective": "Perform basic Helm and Kustomize operations.",
+    "objectiveMm": "Helm နှင့် Kustomize ၏ အခြေခံ လုပ်ဆောင်ချက်များကို လေ့ကျင့်ခြင်း။",
+    "prerequisites": ["helm and kubectl installed", "Cluster access"],
+    "environmentSetup": "A test namespace and internet access for chart repos (or pre-downloaded charts).",
+    "steps": [
+      "Add a chart repo, install a release, then list releases.",
+      "Upgrade the release with changed values and verify rollout/resources.",
+      "Create/apply a simple Kustomize overlay that changes replicas or labels."
+    ],
+    "yamlManifests": [
+      {
+        "name": "kustomization.yaml",
+        "content": "apiVersion: kustomize.config.k8s.io/v1beta1\nkind: Kustomization\nresources:\n- deployment.yaml\nnamePrefix: demo-\n"
+      }
+    ],
+    "commands": ["helm repo add bitnami https://charts.bitnami.com/bitnami", "helm repo update", "helm install web bitnami/nginx -n helm-lab --create-namespace", "helm list -n helm-lab", "kubectl kustomize ./overlay", "kubectl apply -k ./overlay"],
+    "expectedOutput": "Helm release installed/upgraded successfully; Kustomize renders/applies modified manifests.",
+    "troubleshooting": ["Chart values/schema differ by chart version; inspect with `helm show values`.", "Kustomize paths must be correct relative to kustomization.yaml."],
+    "verificationChecklist": ["I can manage a Helm release lifecycle.", "I can preview and apply a Kustomize overlay."]
+  },
+  {
+    "id": "lab-crds-ext",
+    "topicId": "t-crds-operators-ext",
+    "title": "CRD and Extension Interface Discovery",
+    "objective": "Discover CRDs and identify CNI/CSI/CRI-related components.",
+    "objectiveMm": "CRDs များနှင့် CNI/CSI/CRI ဆိုင်ရာ components များကို ရှာဖွေဖော်ထုတ်ခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Any Kubernetes cluster (some CRDs may already exist).",
+    "steps": [
+      "List CRDs and describe one CRD schema/resource.",
+      "List API resources and find custom resources if present.",
+      "Inspect kube-system and relevant namespaces for CNI/CSI/runtime-related pods."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl get crd", "kubectl api-resources", "kubectl get pods -A | grep -E 'cni|calico|cilium|flannel|csi|containerd|kube-proxy'"],
+    "expectedOutput": "CRDs/API resources and extension-related components are identified.",
+    "troubleshooting": ["Not all clusters expose the same component names; focus on roles/interfaces."],
+    "verificationChecklist": ["I can inspect CRDs/custom resources.", "I can identify extension interface components in a cluster."]
+  },
+  {
+    "id": "lab-deployments",
+    "topicId": "t-pods-workloads",
+    "title": "Deployment Rollout and Rollback",
+    "objective": "Create, scale, update, and rollback a Deployment.",
+    "objectiveMm": "Deployment ကို create/scale/update/rollback လုပ်ခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Test namespace.",
+    "steps": [
+      "Create a Deployment with nginx image.",
+      "Scale replicas and verify Pods.",
+      "Update image to trigger rollout, then rollback to previous revision."
+    ],
+    "yamlManifests": [
+      {
+        "name": "web-deploy.yaml",
+        "content": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: web\n  template:\n    metadata:\n      labels:\n        app: web\n    spec:\n      containers:\n      - name: nginx\n        image: nginx:1.27\n        ports:\n        - containerPort: 80\n"
+      }
+    ],
+    "commands": ["kubectl apply -f web-deploy.yaml", "kubectl scale deployment web --replicas=3", "kubectl set image deployment/web nginx=nginx:1.26", "kubectl rollout status deployment/web", "kubectl rollout undo deployment/web"],
+    "expectedOutput": "Deployment scales and rolls out/rolls back successfully.",
+    "troubleshooting": ["If rollout stuck, check `kubectl describe deployment/web` and pod events.", "Image tag typos cause ImagePullBackOff."],
+    "verificationChecklist": ["Replicas scaled correctly.", "Rollback restored previous revision."]
+  },
+  {
+    "id": "lab-workload-types",
+    "topicId": "t-workload-types",
+    "title": "Jobs and CronJobs Practice",
+    "objective": "Create and inspect Job and CronJob workloads.",
+    "objectiveMm": "Job နှင့် CronJob workloads များကို ဖန်တီးစစ်ဆေးခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Any cluster with batch/v1 support.",
+    "steps": [
+      "Create a one-off Job and wait for completion.",
+      "Create a CronJob with a short schedule in a lab environment.",
+      "Inspect created Jobs/Pods and logs."
+    ],
+    "yamlManifests": [
+      {
+        "name": "cronjob.yaml",
+        "content": "apiVersion: batch/v1\nkind: CronJob\nmetadata:\n  name: hello\nspec:\n  schedule: \"*/5 * * * *\"\n  jobTemplate:\n    spec:\n      template:\n        spec:\n          restartPolicy: OnFailure\n          containers:\n          - name: hello\n            image: busybox:1.36\n            command: [\"sh\", \"-c\", \"date; echo hello\"]\n"
+      }
+    ],
+    "commands": ["kubectl create job once --image=busybox:1.36 -- sh -c 'echo done'", "kubectl get jobs,pods", "kubectl apply -f cronjob.yaml", "kubectl get cronjobs,jobs"],
+    "expectedOutput": "Job completes; CronJob creates Jobs on schedule.",
+    "troubleshooting": ["CronJob timing depends on controller manager and cluster time.", "Check pod logs for command output."],
+    "verificationChecklist": ["Job completed successfully.", "CronJob generated at least one Job (or configuration validated)."]
+  },
+  {
+    "id": "lab-config-probes",
+    "topicId": "t-config-secrets-probes",
+    "title": "ConfigMap, Secret, Probe, and Resources",
+    "objective": "Configure an app Pod with external config, probe, and resource settings.",
+    "objectiveMm": "ConfigMap/Secret, probe နှင့် resources များဖြင့် Pod ကို ပြင်ဆင်ခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Test namespace.",
+    "steps": [
+      "Create ConfigMap and Secret.",
+      "Deploy a Pod/Deployment consuming them via env/envFrom or volumes.",
+      "Add readiness probe and resource requests/limits; verify Pod status."
+    ],
+    "yamlManifests": [
+      {
+        "name": "config-probe.yaml",
+        "content": "apiVersion: v1\nkind: ConfigMap\nmetadata:\n  name: app-config\ndata:\n  APP_MODE: demo\n---\napiVersion: v1\nkind: Secret\nmetadata:\n  name: app-secret\ntype: Opaque\nstringData:\n  PASSWORD: example\n---\napiVersion: v1\nkind: Pod\nmetadata:\n  name: app-config-pod\nspec:\n  containers:\n  - name: app\n    image: nginx:1.27\n    envFrom:\n    - configMapRef:\n        name: app-config\n    env:\n    - name: PASSWORD\n      valueFrom:\n        secretKeyRef:\n          name: app-secret\n          key: PASSWORD\n    resources:\n      requests:\n        cpu: 50m\n        memory: 64Mi\n      limits:\n        cpu: 200m\n        memory: 128Mi\n    readinessProbe:\n      httpGet:\n        path: /\n        port: 80\n      initialDelaySeconds: 3\n      periodSeconds: 5\n"
+      }
+    ],
+    "commands": ["kubectl apply -f config-probe.yaml", "kubectl get pod app-config-pod", "kubectl describe pod app-config-pod", "kubectl exec app-config-pod -- printenv APP_MODE"],
+    "expectedOutput": "Pod becomes Ready; env vars from ConfigMap/Secret available.",
+    "troubleshooting": ["Probe failures keep Pod NotReady; check container port/path.", "Secret key names must match exactly."],
+    "verificationChecklist": ["Config and secret injected correctly.", "Probe and resources visible in Pod spec/status."]
+  },
+  {
+    "id": "lab-scheduling",
+    "topicId": "t-scheduling",
+    "title": "Taints, Tolerations, and Node Affinity",
+    "objective": "Control Pod placement with scheduling primitives.",
+    "objectiveMm": "Scheduling primitives များဖြင့် Pod placement ကို ထိန်းချုပ်ခြင်း။",
+    "prerequisites": ["Cluster with at least one schedulable node"],
+    "environmentSetup": "Use labels/taints on a test node; clean up after lab.",
+    "steps": [
+      "Label a node and create a Pod with node affinity/selector.",
+      "Apply a taint to the node and observe scheduling behavior.",
+      "Add a matching toleration and confirm Pod can schedule."
+    ],
+    "yamlManifests": [
+      {
+        "name": "toleration-pod.yaml",
+        "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: tolerate-pod\nspec:\n  tolerations:\n  - key: \"dedicated\"\n    operator: \"Equal\"\n    value: \"lab\"\n    effect: \"NoSchedule\"\n  containers:\n  - name: nginx\n    image: nginx:1.27\n"
+      }
+    ],
+    "commands": ["kubectl label node <node> disktype=ssd --overwrite", "kubectl taint node <node> dedicated=lab:NoSchedule", "kubectl apply -f toleration-pod.yaml", "kubectl describe pod tolerate-pod", "kubectl taint node <node> dedicated=lab:NoSchedule-"],
+    "expectedOutput": "Pod scheduling behavior changes according to taints/tolerations/affinity rules.",
+    "troubleshooting": ["Pending pods: inspect Events for FailedScheduling reasons.", "Remove test taints/labels after practice."],
+    "verificationChecklist": ["I can apply/remove taints and labels.", "I can explain why a Pod is Pending due to scheduling constraints."]
+  },
+  {
+    "id": "lab-autoscaling",
+    "topicId": "t-autoscaling-selfhealing",
+    "title": "HPA and Self-Healing Observation",
+    "objective": "Create an HPA and observe controller self-healing behavior.",
+    "objectiveMm": "HPA ဖန်တီးခြင်းနှင့် self-healing behavior ကို လေ့လာခြင်း။",
+    "prerequisites": ["kubectl access", "metrics-server for live HPA metrics (optional)"],
+    "environmentSetup": "Deployment with CPU requests set.",
+    "steps": [
+      "Create a Deployment with resource requests.",
+      "Create an HPA targeting the Deployment.",
+      "Delete a Pod and observe automatic recreation by the controller."
+    ],
+    "yamlManifests": [
+      {
+        "name": "hpa-demo.yaml",
+        "content": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web-hpa-demo\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: web-hpa-demo\n  template:\n    metadata:\n      labels:\n        app: web-hpa-demo\n    spec:\n      containers:\n      - name: nginx\n        image: nginx:1.27\n        resources:\n          requests:\n            cpu: 50m\n          limits:\n            cpu: 200m\n---\napiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nmetadata:\n  name: web-hpa-demo\nspec:\n  scaleTargetRef:\n    apiVersion: apps/v1\n    kind: Deployment\n    name: web-hpa-demo\n  minReplicas: 1\n  maxReplicas: 4\n  metrics:\n  - type: Resource\n    resource:\n      name: cpu\n      target:\n        type: Utilization\n        averageUtilization: 50\n"
+      }
+    ],
+    "commands": ["kubectl apply -f hpa-demo.yaml", "kubectl get hpa", "kubectl get pods -l app=web-hpa-demo", "kubectl delete pod -l app=web-hpa-demo"],
+    "expectedOutput": "HPA object created; deleted pod replaced by Deployment controller.",
+    "troubleshooting": ["HPA may show unknown metrics if metrics-server is missing.", "Self-healing still works via Deployment even without HPA scaling events."],
+    "verificationChecklist": ["HPA created and inspectable.", "Pod recreation observed after deletion."]
+  },
+  {
+    "id": "lab-services",
+    "topicId": "t-services",
+    "title": "Service Types and Endpoints",
+    "objective": "Expose a Deployment and verify service endpoints.",
+    "objectiveMm": "Deployment ကို expose လုပ်ပြီး service endpoints များကို စစ်ဆေးခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Cluster with working Pod networking.",
+    "steps": [
+      "Deploy an app with labels.",
+      "Create ClusterIP/NodePort services and inspect endpoints/endpointslices.",
+      "Test connectivity from within the cluster."
+    ],
+    "yamlManifests": [
+      {
+        "name": "svc-demo.yaml",
+        "content": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: echo\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: echo\n  template:\n    metadata:\n      labels:\n        app: echo\n    spec:\n      containers:\n      - name: nginx\n        image: nginx:1.27\n        ports:\n        - containerPort: 80\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: echo-svc\nspec:\n  selector:\n    app: echo\n  ports:\n  - port: 80\n    targetPort: 80\n"
+      }
+    ],
+    "commands": ["kubectl apply -f svc-demo.yaml", "kubectl get svc,endpoints,endpointslices,pods -l app=echo", "kubectl run tmp --rm -it --image=busybox:1.36 --restart=Never -- wget -qO- http://echo-svc"],
+    "expectedOutput": "Service has endpoints matching pod IPs; in-cluster request succeeds.",
+    "troubleshooting": ["Empty endpoints usually mean selector/label mismatch.", "Port/targetPort mismatch breaks connectivity."],
+    "verificationChecklist": ["Service resolves to backing pods.", "Connectivity test succeeds."]
+  },
+  {
+    "id": "lab-networkpolicy",
+    "topicId": "t-networkpolicy",
+    "title": "NetworkPolicy Allow/Deny Behavior",
+    "objective": "Apply a NetworkPolicy and validate traffic restrictions.",
+    "objectiveMm": "NetworkPolicy ကို အသုံးပြုပြီး traffic restrictions များကို စစ်ဆေးခြင်း။",
+    "prerequisites": ["Cluster with CNI supporting NetworkPolicy", "kubectl access"],
+    "environmentSetup": "Namespace with test client/server pods.",
+    "steps": [
+      "Deploy server and client pods with labels.",
+      "Confirm baseline connectivity.",
+      "Apply restrictive NetworkPolicy and retest connectivity.",
+      "Add allow rule and verify permitted traffic."
+    ],
+    "yamlManifests": [
+      {
+        "name": "netpol-demo.yaml",
+        "content": "apiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: api-allow-web\nspec:\n  podSelector:\n    matchLabels:\n      app: api\n  policyTypes:\n  - Ingress\n  ingress:\n  - from:\n    - podSelector:\n        matchLabels:\n          app: web\n    ports:\n    - protocol: TCP\n      port: 80\n"
+      }
+    ],
+    "commands": ["kubectl get pods --show-labels", "kubectl apply -f netpol-demo.yaml", "kubectl describe netpol api-allow-web"],
+    "expectedOutput": "Traffic allowed/blocked according to policy (if enforced by CNI).",
+    "troubleshooting": ["If policy has no effect, CNI may not enforce NetworkPolicy.", "Namespace selectors require correct labels on namespaces."],
+    "verificationChecklist": ["Policy selects intended pods.", "Observed behavior matches policy intent."]
+  },
+  {
+    "id": "lab-ingress-gateway",
+    "topicId": "t-ingress-gateway",
+    "title": "Ingress and Gateway API Resource Inspection",
+    "objective": "Create/inspect Ingress and review Gateway API resources.",
+    "objectiveMm": "Ingress ကို ဖန်တီး/စစ်ဆေးခြင်းနှင့် Gateway API resources များကို လေ့လာခြင်း။",
+    "prerequisites": ["Ingress controller for Ingress tests (optional)", "Gateway API CRDs/controller for Gateway tests (optional)"],
+    "environmentSetup": "Cluster with routing components if testing live traffic; otherwise practice manifests and inspection.",
+    "steps": [
+      "Create Service-backed app and an Ingress resource.",
+      "Inspect IngressClass/Ingress status and rules.",
+      "List Gateway API resources if installed and compare object roles."
+    ],
+    "yamlManifests": [
+      {
+        "name": "ingress-demo.yaml",
+        "content": "apiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  name: web-ingress\nspec:\n  ingressClassName: nginx\n  rules:\n  - host: web.example.local\n    http:\n      paths:\n      - path: /\n        pathType: Prefix\n        backend:\n          service:\n            name: echo-svc\n            port:\n              number: 80\n"
+      }
+    ],
+    "commands": ["kubectl apply -f ingress-demo.yaml", "kubectl get ingress,ingressclass", "kubectl describe ingress web-ingress", "kubectl get gatewayclass,gateway,httproute -A"],
+    "expectedOutput": "Ingress resource created; routing works when a matching controller exists.",
+    "troubleshooting": ["Ingress without controller/class will not route traffic.", "Gateway API objects require installed CRDs and controller implementation."],
+    "verificationChecklist": ["I can author a basic Ingress manifest.", "I can identify Gateway API resource types and purpose."]
+  },
+  {
+    "id": "lab-coredns",
+    "topicId": "t-dns-coredns",
+    "title": "CoreDNS Health and DNS Resolution Test",
+    "objective": "Verify CoreDNS operation and test in-cluster DNS.",
+    "objectiveMm": "CoreDNS လုပ်ဆောင်ချက်နှင့် in-cluster DNS resolution ကို စစ်ဆေးခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Cluster with CoreDNS deployed (default in most distributions).",
+    "steps": [
+      "Check CoreDNS pods and kube-dns Service/endpoints.",
+      "Inspect CoreDNS logs and ConfigMap.",
+      "Run DNS lookup tests from a temporary pod."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl get pods -n kube-system -l k8s-app=kube-dns", "kubectl get svc,endpoints -n kube-system kube-dns", "kubectl get cm coredns -n kube-system -o yaml", "kubectl run dns-test --rm -it --image=busybox:1.36 --restart=Never -- nslookup kubernetes.default"],
+    "expectedOutput": "CoreDNS healthy and service names resolve to cluster IPs.",
+    "troubleshooting": ["If lookups fail, verify CoreDNS pods, endpoints, and network policies affecting DNS.", "Check node/pod networking and upstream config in Corefile."],
+    "verificationChecklist": ["CoreDNS components are healthy.", "In-cluster DNS lookups succeed."]
+  },
+  {
+    "id": "lab-cni-networking",
+    "topicId": "t-cni-service-networking",
+    "title": "CNI and Service Networking Inspection",
+    "objective": "Identify networking components and trace service-to-pod mapping.",
+    "objectiveMm": "Networking components များကို ဖော်ထုတ်ပြီး service-to-pod mapping ကို ခြေရာခံခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Any running cluster.",
+    "steps": [
+      "Identify CNI and kube-proxy/dataplane pods in kube-system.",
+      "Inspect node PodCIDRs and service resources.",
+      "Map a Service selector to Pod IPs/endpoints."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl get pods -n kube-system -o wide", "kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name} {.spec.podCIDR}{\"\\n\"}{end}'", "kubectl get svc,endpointslices -A"],
+    "expectedOutput": "Clear view of CNI components, pod CIDRs, and service endpoint mapping.",
+    "troubleshooting": ["Component names vary by CNI implementation; focus on function."],
+    "verificationChecklist": ["I can locate networking components.", "I can explain how a Service selects backend Pods."]
+  },
+  {
+    "id": "lab-storage-core",
+    "topicId": "t-storage-core",
+    "title": "PVC Mount in a Pod",
+    "objective": "Create and mount a PVC for persistent data.",
+    "objectiveMm": "Persistent data အတွက် PVC ကို ဖန်တီး mount လုပ်ခြင်း။",
+    "prerequisites": ["Cluster with default StorageClass or pre-created PV", "kubectl access"],
+    "environmentSetup": "Namespace with storage support.",
+    "steps": [
+      "Create a PVC and wait for binding (if dynamic provisioning available).",
+      "Create a Pod mounting the PVC and write test data.",
+      "Restart/recreate Pod and verify data persistence (depending on backend)."
+    ],
+    "yamlManifests": [
+      {
+        "name": "pvc-pod.yaml",
+        "content": "apiVersion: v1\nkind: PersistentVolumeClaim\nmetadata:\n  name: data-pvc\nspec:\n  accessModes: [\"ReadWriteOnce\"]\n  resources:\n    requests:\n      storage: 1Gi\n---\napiVersion: v1\nkind: Pod\nmetadata:\n  name: pvc-demo\nspec:\n  containers:\n  - name: app\n    image: busybox:1.36\n    command: [\"sh\", \"-c\", \"sleep 3600\"]\n    volumeMounts:\n    - name: data\n      mountPath: /data\n  volumes:\n  - name: data\n    persistentVolumeClaim:\n      claimName: data-pvc\n"
+      }
+    ],
+    "commands": ["kubectl apply -f pvc-pod.yaml", "kubectl get pvc,pv,pod", "kubectl exec pvc-demo -- sh -c 'echo hello > /data/test.txt'", "kubectl exec pvc-demo -- cat /data/test.txt"],
+    "expectedOutput": "PVC binds and mounted volume is writable/readable in Pod.",
+    "troubleshooting": ["Pending PVC: check StorageClass, provisioner, events, and access mode compatibility.", "Pod Pending: check volume attachment/mount events."],
+    "verificationChecklist": ["PVC bound successfully.", "Pod can read/write mounted data."]
+  },
+  {
+    "id": "lab-storageclass",
+    "topicId": "t-storageclass-provisioning",
+    "title": "StorageClass and Provisioning Behavior",
+    "objective": "Inspect StorageClasses and understand dynamic provisioning settings.",
+    "objectiveMm": "StorageClasses နှင့် dynamic provisioning settings များကို စစ်ဆေးနားလည်ခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Cluster with at least one StorageClass (most local clusters provide one).",
+    "steps": [
+      "List StorageClasses and identify default class.",
+      "Describe provisioner, reclaimPolicy, and volumeBindingMode.",
+      "Create a PVC using a specific StorageClass and observe binding behavior."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl get storageclass", "kubectl describe storageclass <name>", "kubectl get pvc -A"],
+    "expectedOutput": "StorageClass properties understood; PVC binding behavior observed.",
+    "troubleshooting": ["WaitForFirstConsumer delays binding until a Pod uses the PVC."],
+    "verificationChecklist": ["I can identify default StorageClass.", "I can explain reclaimPolicy and access modes."]
+  },
+  {
+    "id": "lab-storage-troubleshooting",
+    "topicId": "t-csi-mounts-troubleshooting",
+    "title": "Diagnose PVC/PV and Mount Issues",
+    "objective": "Use events and describe output to troubleshoot storage problems.",
+    "objectiveMm": "Storage ပြဿနာများကို events/describe output များဖြင့် troubleshoot လုပ်ခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Use an intentionally misconfigured PVC/Pod in a lab namespace.",
+    "steps": [
+      "Create a PVC requesting unavailable class/size/mode (lab scenario).",
+      "Observe Pending state and inspect events/describe output.",
+      "Correct the manifest and verify successful binding/mount."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl get pvc,pv,pods", "kubectl describe pvc <name>", "kubectl describe pod <name>", "kubectl get events --sort-by=.lastTimestamp"],
+    "expectedOutput": "Root cause identified from events and resolved by configuration fix.",
+    "troubleshooting": ["Common causes: missing StorageClass, no matching PV, access mode mismatch, node affinity constraints."],
+    "verificationChecklist": ["I can identify why PVC/Pod is Pending.", "I can validate fix through status/events."]
+  },
+  {
+    "id": "lab-troubleshoot-nodes",
+    "topicId": "t-troubleshoot-cluster-nodes",
+    "title": "Node Troubleshooting Workflow",
+    "objective": "Practice systematic node triage using kubectl and node-level checks.",
+    "objectiveMm": "Node ပြဿနာများကို စနစ်တကျ triage လုပ်ခြင်း။",
+    "prerequisites": ["Cluster access", "Optional node access"],
+    "environmentSetup": "Lab cluster where a node issue can be simulated or reviewed.",
+    "steps": [
+      "Check node statuses and conditions.",
+      "Inspect events and workloads affected by node issues.",
+      "Review kubelet/service indicators and propose remediation steps."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl get nodes", "kubectl describe node <node>", "kubectl get pods -A -o wide", "kubectl get events -A --sort-by=.lastTimestamp"],
+    "expectedOutput": "Likely failure domain identified (kubelet, runtime, network, pressure, etc.).",
+    "troubleshooting": ["Distinguish control-plane vs worker symptoms.", "Drain/cordon considerations depend on workload state."],
+    "verificationChecklist": ["I can gather evidence for node issues.", "I can propose/execute safe remediation steps."]
+  },
+  {
+    "id": "lab-troubleshoot-apps",
+    "topicId": "t-troubleshoot-control-plane-apps",
+    "title": "Pod and Control Plane Symptom Debugging",
+    "objective": "Debug common Pod failures and inspect control plane component health.",
+    "objectiveMm": "Pod failures နှင့် control plane component health များကို debug လုပ်ခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Namespace with sample broken manifests (image typo, bad command, bad config).",
+    "steps": [
+      "Deploy a broken Pod/Deployment and identify failure reason.",
+      "Use describe, logs, previous logs, and events to pinpoint root cause.",
+      "Fix manifest and verify recovery; inspect kube-system control plane pods for health signals."
+    ],
+    "yamlManifests": [
+      {
+        "name": "broken-pod.yaml",
+        "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: broken-image\nspec:\n  containers:\n  - name: app\n    image: nginx:does-not-exist\n"
+      }
+    ],
+    "commands": ["kubectl apply -f broken-pod.yaml", "kubectl get pod broken-image", "kubectl describe pod broken-image", "kubectl get events --sort-by=.lastTimestamp", "kubectl get pods -n kube-system"],
+    "expectedOutput": "Failure reason identified (e.g. ImagePullBackOff) and corrected.",
+    "troubleshooting": ["Use `--previous` for crash loops.", "Check ConfigMap/Secret names and mounts for config errors."],
+    "verificationChecklist": ["I can diagnose from events/logs/describe.", "I can restore workload to healthy state."]
+  },
+  {
+    "id": "lab-troubleshoot-network",
+    "topicId": "t-troubleshoot-network-services",
+    "title": "Service and DNS Troubleshooting",
+    "objective": "Trace and fix Service/DNS connectivity issues.",
+    "objectiveMm": "Service/DNS connectivity ပြဿနာများကို ခြေရာခံဖြေရှင်းခြင်း။",
+    "prerequisites": ["kubectl access"],
+    "environmentSetup": "Namespace with app and test client pod.",
+    "steps": [
+      "Create a Service with an intentional selector mismatch and observe empty endpoints.",
+      "Fix selector/labels and verify endpoints populate.",
+      "Test DNS/name resolution and HTTP connectivity from a client pod."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl get svc,endpointslices,pods --show-labels", "kubectl describe svc <svc>", "kubectl run test --rm -it --image=busybox:1.36 --restart=Never -- nslookup <svc>", "kubectl run test --rm -it --image=busybox:1.36 --restart=Never -- wget -qO- http://<svc>"],
+    "expectedOutput": "Service endpoints become healthy and DNS/connectivity tests succeed after fix.",
+    "troubleshooting": ["Check targetPort/containerPort alignment.", "NetworkPolicies may block test traffic."],
+    "verificationChecklist": ["I can debug selector/endpoint issues.", "I can validate DNS and service connectivity."]
+  },
+  {
+    "id": "lab-monitoring-logs",
+    "topicId": "t-monitoring-logs",
+    "title": "Logs, Events, and kubectl top",
+    "objective": "Collect observability signals for troubleshooting and monitoring.",
+    "objectiveMm": "Troubleshooting/monitoring အတွက် logs, events, metrics signals များကို စုဆောင်းခြင်း။",
+    "prerequisites": ["kubectl access", "metrics-server optional for top commands"],
+    "environmentSetup": "Running workloads generating logs.",
+    "steps": [
+      "Stream and filter container logs (including previous logs if restarted).",
+      "List and sort events by timestamp.",
+      "Use kubectl top to inspect node/pod resource usage when available."
+    ],
+    "yamlManifests": [],
+    "commands": ["kubectl logs <pod> -n <ns>", "kubectl logs <pod> -n <ns> --previous", "kubectl get events -A --sort-by=.lastTimestamp", "kubectl top nodes", "kubectl top pods -A"],
+    "expectedOutput": "Relevant logs/events/metrics identified for a given issue.",
+    "troubleshooting": ["If kubectl top fails, metrics-server may not be installed.", "Multi-container pods require -c <container>."],
+    "verificationChecklist": ["I can retrieve current and previous logs.", "I can correlate events with resource symptoms."]
+  }
+]

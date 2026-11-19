@@ -1,0 +1,62 @@
+[
+  {
+    "id": "course-k8s-docs",
+    "name": "Kubernetes Official Documentation",
+    "provider": "Kubernetes Authors / CNCF",
+    "url": "https://kubernetes.io/docs/home/",
+    "type": "free",
+    "duration": "Self-paced (ongoing reference)",
+    "domainIds": ["cluster-arch", "workloads", "networking", "storage", "troubleshooting"],
+    "recommendedOrder": 1,
+    "notes": "Primary exam-allowed reference style resource for concepts, tasks, and kubectl usage. Use tasks and concepts sections heavily during preparation.",
+    "verified": true
+  },
+  {
+    "id": "course-cka-lf",
+    "name": "Certified Kubernetes Administrator (CKA)",
+    "provider": "The Linux Foundation Training & Certification",
+    "url": "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/",
+    "type": "paid",
+    "duration": "Exam prep varies; exam includes simulator access per current LF offering",
+    "domainIds": ["cluster-arch", "workloads", "networking", "storage", "troubleshooting"],
+    "recommendedOrder": 2,
+    "notes": "Official certification page with exam details, domains/competencies, resources, and enrollment. Verify current bundle/simulator details on the page.",
+    "verified": true
+  },
+  {
+    "id": "course-cncf-curriculum",
+    "name": "CNCF Certification Curriculum (CKA)",
+    "provider": "CNCF (GitHub)",
+    "url": "https://github.com/cncf/curriculum",
+    "type": "free",
+    "duration": "Self-paced (curriculum review)",
+    "domainIds": ["cluster-arch", "workloads", "networking", "storage", "troubleshooting"],
+    "recommendedOrder": 1,
+    "notes": "Open-source curriculum repository. Use it to verify the latest official CKA domains, competencies, and exam environment version alignment.",
+    "verified": true
+  },
+  {
+    "id": "course-killer-sh",
+    "name": "Killer Shell CKA Simulator",
+    "provider": "Killer.sh",
+    "url": "https://killer.sh/",
+    "type": "paid",
+    "duration": "Simulator sessions (access terms depend on exam registration/offers)",
+    "domainIds": ["cluster-arch", "workloads", "networking", "storage", "troubleshooting"],
+    "recommendedOrder": 5,
+    "notes": "Realistic exam-style scenarios. Linux Foundation exam registration commonly includes simulator access; confirm current terms on official pages.",
+    "verified": true
+  },
+  {
+    "id": "course-k8s-the-hard-way",
+    "name": "Kubernetes The Hard Way",
+    "provider": "Kelsey Hightower (GitHub)",
+    "url": "https://github.com/kelseyhightower/kubernetes-the-hard-way",
+    "type": "free",
+    "duration": "Self-paced (advanced lab)",
+    "domainIds": ["cluster-arch"],
+    "recommendedOrder": 4,
+    "notes": "Supplementary deep-dive for understanding cluster components and bootstrapping concepts. Not an official exam requirement; useful for architecture mastery.",
+    "verified": true
+  }
+]
