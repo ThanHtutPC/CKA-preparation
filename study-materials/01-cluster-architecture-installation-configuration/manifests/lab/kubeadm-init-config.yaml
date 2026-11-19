@@ -1,0 +1,26 @@
+# kubeadm init configuration for the Ubuntu lab (see labs/lab-01-ubuntu-kubeadm-cluster.md)
+# Before use:
+#   1. replace CP_IP with the control plane VM IP
+#   2. replace kubernetesVersion with the output of: kubeadm version -o short
+# kubeadm.k8s.io/v1beta4 applies to kubeadm v1.31+. Check `kubeadm config print init-defaults`
+# on your version to confirm the apiVersion.
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: CP_IP
+  bindPort: 6443
+nodeRegistration:
+  name: cp1
+  criSocket: unix:///run/containerd/containerd.sock
+---
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+kubernetesVersion: v1.34.0
+controlPlaneEndpoint: "k8s-api:6443"
+networking:
+  podSubnet: 10.244.0.0/16      # matches the default Flannel network
+  serviceSubnet: 10.96.0.0/12
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
