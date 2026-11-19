@@ -1,0 +1,25 @@
+# OS/editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Local env/secrets (do not commit real credentials)
+.env
+*.pem
+*.key
+kubeconfig
+*kubeconfig*
+.envrc
+
+# Archives/temp
+*.bak
+*.orig
+tmp/
+temp/
